@@ -1,0 +1,102 @@
+---
+import Layout from "./Layout.astro";
+import type { MarkdownLayoutProps } from "astro";
+import "../../../../packages/viewmotion/src/styles.css";
+import "../styles/global.css";
+import "../styles/docs.css";
+
+type Props = MarkdownLayoutProps<{
+  title?: string;
+  description?: string;
+}>;
+
+const { frontmatter, headings } = Astro.props;
+const title = frontmatter?.title ?? "Docs — viewmotion";
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+---
+
+<Layout title={title}>
+  <div class="docs-layout">
+    <aside class="doc-nav" aria-label="Documentation menu">
+      <nav>
+        <p class="doc-nav-section">Guide</p>
+        <ul>
+          <li>
+            <a
+              href="/docs/getting-started"
+              class="doc-nav-link"
+              aria-current={currentPath === "/docs/getting-started"
+                ? "page"
+                : undefined}>Getting Started</a
+            >
+          </li>
+        </ul>
+
+        <p class="doc-nav-section">API</p>
+        <ul>
+          <li><a href="#" class="doc-nav-link">initMotion()</a></li>
+          <li><a href="#" class="doc-nav-link">motion()</a></li>
+          <li><a href="#" class="doc-nav-link">stagger()</a></li>
+          <li><a href="#" class="doc-nav-link">registerPreset()</a></li>
+        </ul>
+
+        <p class="doc-nav-section">Presets</p>
+        <ul>
+          <li><a href="#" class="doc-nav-link">Built-in presets</a></li>
+          <li><a href="#" class="doc-nav-link">Custom presets</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="prose">
+      <slot />
+    </main>
+
+    <aside class="doc-toc" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <nav>
+        <ul>
+          {
+            tocHeadings.map((h) => (
+              <li class={h.depth === 3 ? "toc-item toc-item--sub" : "toc-item"}>
+                <a href={`#${h.slug}`} class="toc-link">
+                  {h.text}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+  </div>
+
+  <script>
+    import { initMotion } from "viewmotion";
+    await initMotion();
+
+    // Highlight active TOC link on scroll
+    const links = document.querySelectorAll<HTMLAnchorElement>(".toc-link");
+    const headingEls = document.querySelectorAll<HTMLElement>(
+      ".prose h1, .prose h2, .prose h3",
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            links.forEach((l) => l.classList.remove("toc-link--active"));
+            const active = document.querySelector<HTMLAnchorElement>(
+              `.toc-link[href="#${id}"]`,
+            );
+            active?.classList.add("toc-link--active");
+          }
+        }
+      },
+      { rootMargin: "0px 0px -70% 0px", threshold: 0 },
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
+  </script>
+</Layout>

@@ -1,0 +1,170 @@
+/**
+ * viewmotion — base styles
+ *
+ * Import once in your project:
+ *   import 'viewmotion/styles.css'
+ *
+ * Includes Lenis smooth scroll base styles and all animation presets.
+ * JS only sets --motion-duration and --motion-delay custom properties.
+ * Custom presets registered via registerPreset() inject their own rules
+ * automatically at runtime.
+ */
+
+/* ─── Lenis smooth scroll ─── */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ─── Keyframes ─── */
+
+@keyframes motion-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-zoom-out {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ─── Initial hidden state ─── */
+
+/* All [data-motion] elements start hidden; JS adds .motion-in to reveal them. */
+/* Stagger containers use [data-stagger] instead and are not hidden. */
+[data-motion]:not(.motion-in) {
+  opacity: 0;
+}
+
+/* ─── Reveal animations (triggered by .motion-in) ─── */
+
+[data-motion="fade-up"].motion-in {
+  animation: motion-fade-up var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="fade"].motion-in {
+  animation: motion-fade var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="slide-left"].motion-in {
+  animation: motion-slide-left var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="scale-in"].motion-in {
+  animation: motion-scale-in var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="fade-down"].motion-in {
+  animation: motion-fade-down var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="slide-right"].motion-in {
+  animation: motion-slide-right var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="zoom-out"].motion-in {
+  animation: motion-zoom-out var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}
+
+[data-motion="blur-in"].motion-in {
+  animation: motion-blur-in var(--motion-duration, 600ms)
+    cubic-bezier(0.4, 0, 0.2, 1) var(--motion-delay, 0ms) both;
+}

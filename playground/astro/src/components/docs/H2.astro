@@ -1,0 +1,10 @@
+---
+import { motion } from "viewmotion";
+---
+
+<h2
+  {...motion({ preset: "fade", duration: 500, once: true, delay: 50 })}
+  {...Astro.props}
+>
+  <slot />
+</h2>

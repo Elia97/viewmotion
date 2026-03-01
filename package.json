@@ -1,0 +1,15 @@
+{
+  "name": "viewmotion-workspace",
+  "private": true,
+  "packageManager": "pnpm@10.30.1",
+  "scripts": {
+    "build": "pnpm --filter './packages/**' build",
+    "test": "pnpm --filter './packages/**' test",
+    "dev:vanilla": "pnpm --filter playground-vanilla dev",
+    "dev:astro": "pnpm --filter playground-astro dev",
+    "dev:react": "pnpm --filter playground-react dev",
+    "dev:vue": "pnpm --filter playground-vue dev",
+    "dev:svelte": "pnpm --filter playground-svelte dev",
+    "clean": "pnpm --filter './packages/**' clean"
+  }
+}

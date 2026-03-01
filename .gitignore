@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tgz
+
+# Coverage
+coverage/
+
+# npm lock files (this is a pnpm workspace — pnpm-lock.yaml is the source of truth)
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Playground output
+.astro/
+
+# Claude
+.claude/

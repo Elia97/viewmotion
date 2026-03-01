@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "viewmotion": ["../../packages/viewmotion/src/index.ts"],
+      "viewmotion/styles.css": ["../../packages/viewmotion/src/styles.css"]
+    }
+  },
+  "include": [".astro/types.d.ts", "**/*", "../../packages/viewmotion/src/**/*.ts"],
+  "exclude": ["dist"]
+}

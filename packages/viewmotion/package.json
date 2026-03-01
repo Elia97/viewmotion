@@ -1,0 +1,67 @@
+{
+  "name": "viewmotion",
+  "version": "0.1.0",
+  "description": "Minimal reveal animation system for landing pages — framework-agnostic, SSR-ready, zero runtime dependencies",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "import": "./dist/adapter.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "motion",
+    "animation",
+    "reveal",
+    "intersection-observer",
+    "scroll",
+    "ssr",
+    "framework-agnostic"
+  ],
+  "author": "Elia Zarantonello <email@eliazarantonello.dev> (https://github.com/Elia97)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Elia97/viewmotion.git"
+  },
+  "homepage": "https://viewmotion.netlify.app",
+  "peerDependencies": {
+    "lenis": "^1.3.0"
+  },
+  "peerDependenciesMeta": {
+    "lenis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "happy-dom": "^20.7.0",
+    "lenis": "^1.3.17",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^4.0.18"
+  }
+}

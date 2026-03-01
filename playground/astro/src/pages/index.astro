@@ -1,0 +1,314 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { motion, stagger } from "viewmotion";
+---
+
+<Layout>
+  <!-- ─── HERO ─── -->
+  <div
+    class="min-h-[calc(100vh-4rem)] flex flex-col justify-center px-8 max-w-4xl mx-auto"
+  >
+    <div {...motion({ preset: "fade-down", delay: 800, duration: 700 })}>
+      <span
+        class="inline-block bg-[#1e1e2e] border border-indigo-500 text-indigo-400 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-6"
+      >
+        viewmotion v0.0.1 — Astro
+      </span>
+    </div>
+
+    <h1
+      class="text-5xl md:text-7xl font-bold tracking-tight leading-none mb-6"
+      {...motion({ preset: "fade-up", delay: 200, duration: 700 })}
+    >
+      Minimal motion<br />for the modern web.
+    </h1>
+
+    <p
+      class="text-neutral-400 text-lg max-w-lg mb-4"
+      {...motion({ preset: "fade-up", delay: 400, duration: 700 })}
+    >
+      Framework-agnostic reveal animations powered by
+      <code>IntersectionObserver</code>, CSS animations, and zero runtime
+      dependencies.
+    </p>
+
+    <p
+      class="text-neutral-500 text-base mb-0"
+      {...motion({ preset: "fade", delay: 600, duration: 800 })}
+    >
+      Scroll down to see animations trigger ↓
+    </p>
+  </div>
+
+  <hr class="border-t border-[#2a2a2a] max-w-4xl mx-auto" />
+
+  <!-- ─── SECTION 1 — What it does ─── -->
+  <section class="py-24 px-8 max-w-4xl mx-auto">
+    <h2
+      class="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
+      {...motion({ preset: "slide-left", duration: 600 })}
+    >
+      What it does
+    </h2>
+    <p
+      class="text-neutral-400 text-lg max-w-lg mb-8"
+      {...motion({ preset: "fade-up", delay: 100 })}
+    >
+      viewmotion observes elements entering the viewport and applies a CSS class
+      that triggers a smooth animation. No scroll events. No polling. One
+      observer.
+    </p>
+
+    <div>
+      <div
+        class="flex gap-4 py-6 border-b border-[#2a2a2a]"
+        {...motion({ preset: "slide-left", delay: 0, duration: 500 })}
+      >
+        <div
+          class="shrink-0 w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center text-sm"
+        >
+          ✦
+        </div>
+        <div>
+          <strong>IntersectionObserver</strong>
+          <p class="text-neutral-400 text-sm mt-1 mb-0">
+            Single global observer for all animated elements.
+          </p>
+        </div>
+      </div>
+      <div
+        class="flex gap-4 py-6 border-b border-[#2a2a2a]"
+        {...motion({ preset: "slide-left", delay: 80, duration: 500 })}
+      >
+        <div
+          class="shrink-0 w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center text-sm"
+        >
+          ⚡
+        </div>
+        <div>
+          <strong>Zero dependencies</strong>
+          <p class="text-neutral-400 text-sm mt-1 mb-0">
+            No GSAP. No scroll libraries. Just the platform.
+          </p>
+        </div>
+      </div>
+      <div
+        class="flex gap-4 py-6"
+        {...motion({ preset: "slide-left", delay: 160, duration: 500 })}
+      >
+        <div
+          class="shrink-0 w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center text-sm"
+        >
+          ♿
+        </div>
+        <div>
+          <strong>Accessible</strong>
+          <p class="text-neutral-400 text-sm mt-1 mb-0">
+            Respects <code>prefers-reduced-motion</code> out of the box.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="border-t border-[#2a2a2a] max-w-4xl mx-auto" />
+
+  <!-- ─── SECTION 2 — How to use ─── -->
+  <section class="py-24 px-8 max-w-4xl mx-auto">
+    <h2
+      class="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
+      {...motion({ preset: "fade-up", duration: 600 })}
+    >
+      Drop-in Astro API
+    </h2>
+    <p
+      class="text-neutral-400 text-lg max-w-lg mb-8"
+      {...motion({ preset: "fade-up", delay: 100 })}
+    >
+      Use the <code>motion()</code> helper in the frontmatter and spread its result
+      directly onto any element. No wrappers. No directives.
+    </p>
+
+    <div
+      class="mt-8 bg-[#161616] border border-[#2a2a2a] rounded-xl p-6 font-mono text-sm leading-loose text-[#e8e8e8]"
+      {...motion({ preset: "scale-in", delay: 150, duration: 600 })}
+    >
+      <div><span class="text-neutral-500">---</span></div>
+      <div>
+        <span class="text-indigo-400">import</span>{" "}
+        {"{ motion, stagger }"}{" "}
+        <span class="text-indigo-400">from</span>{" "}
+        <span class="text-emerald-400">'viewmotion'</span>;
+      </div>
+      <div><span class="text-neutral-500">---</span></div>
+      <div>&nbsp;</div>
+      <div>
+        &lt;h1 <span class="text-indigo-400"
+          >{"{...motion({ preset: 'fade-up', delay: 100 })}"}</span
+        >&gt;
+      </div>
+      <div>
+        &lt;ul <span class="text-indigo-400"
+          >{"{...stagger({ delay: 80 })}"}</span
+        >&gt;
+      </div>
+      <div>
+        &nbsp;&nbsp;&lt;li <span class="text-indigo-400"
+          >{"{...motion({ preset: 'fade-up' })}"}</span
+        >&gt;
+      </div>
+    </div>
+  </section>
+
+  <hr class="border-t border-[#2a2a2a] max-w-4xl mx-auto" />
+
+  <!-- ─── SECTION 3 — All presets ─── -->
+  <section class="py-24 px-8 max-w-4xl mx-auto">
+    <h2
+      class="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
+      {...motion({ preset: "fade-up", duration: 600 })}
+    >
+      All presets
+    </h2>
+    <p
+      class="text-neutral-400 text-lg max-w-lg mb-8"
+      {...motion({ preset: "fade-up", delay: 80 })}
+    >
+      Scroll through to see each animation. Every box uses a different preset.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+      {
+        [
+          { preset: "fade", label: "fade", desc: "Pure opacity, no movement." },
+          {
+            preset: "fade-up",
+            label: "fade-up",
+            desc: "Opacity + rises 24 px.",
+          },
+          {
+            preset: "fade-down",
+            label: "fade-down",
+            desc: "Opacity + drops 24 px from top.",
+          },
+          {
+            preset: "slide-left",
+            label: "slide-left",
+            desc: "Enters from left 32 px.",
+          },
+          {
+            preset: "slide-right",
+            label: "slide-right",
+            desc: "Enters from right 32 px.",
+          },
+          {
+            preset: "scale-in",
+            label: "scale-in",
+            desc: "Scales up from 92%.",
+          },
+          { preset: "zoom-out", label: "zoom-out", desc: "Shrinks from 108%." },
+          { preset: "blur-in", label: "blur-in", desc: "Blur from 6 px." },
+        ].map(({ preset, label, desc }) => (
+          <div
+            class="bg-[#161616] border border-[#2a2a2a] rounded-xl p-6 transition-colors duration-200 hover:border-indigo-500"
+            {...motion({ preset: preset as any })}
+          >
+            <div class="text-sm font-bold text-indigo-400 mb-2">{label}</div>
+            <p class="text-neutral-400 text-xs mb-0">{desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <hr class="border-t border-[#2a2a2a] max-w-4xl mx-auto" />
+
+  <!-- ─── SECTION 4 — Stagger ─── -->
+  <section class="py-24 px-8 max-w-4xl mx-auto">
+    <h2
+      class="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
+      {...motion({ preset: "fade-up", duration: 600 })}
+    >
+      Stagger grid
+    </h2>
+    <p
+      class="text-neutral-400 text-lg max-w-lg mb-8"
+      {...motion({ preset: "fade-up", delay: 80 })}
+    >
+      Use <code>stagger()</code> on a container and all direct children animate in
+      with an automatic delay offset.
+    </p>
+
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8"
+      {...stagger({ delay: 100 })}
+    >
+      {
+        [
+          {
+            n: "01",
+            title: "Observer",
+            desc: "One IntersectionObserver for all elements.",
+          },
+          {
+            n: "02",
+            title: "Presets",
+            desc: "8 built-in presets, extensible with registerPreset().",
+          },
+          {
+            n: "03",
+            title: "Reduced motion",
+            desc: "Instant reveal for accessibility preferences.",
+          },
+          {
+            n: "04",
+            title: "Zero deps",
+            desc: "No runtime dependencies. Pure platform APIs.",
+          },
+          {
+            n: "05",
+            title: "SSR-ready",
+            desc: "Works over static HTML and server-rendered pages.",
+          },
+          {
+            n: "06",
+            title: "Extensible",
+            desc: "Clean architecture ready for V2 features.",
+          },
+        ].map(({ n, title, desc }) => (
+          <div
+            class="bg-[#161616] border border-[#2a2a2a] rounded-xl p-6 transition-colors duration-200 hover:border-indigo-500"
+            {...motion({ preset: "fade-up" })}
+          >
+            <div class="text-3xl font-bold text-indigo-400 mb-2">{n}</div>
+            <h3 class="text-base font-semibold mb-1">{title}</h3>
+            <p class="text-neutral-400 text-sm mb-0">{desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <hr class="border-t border-[#2a2a2a] max-w-4xl mx-auto" />
+
+  <!-- ─── CTA ─── -->
+  <section class="py-24 px-8 max-w-4xl mx-auto">
+    <div
+      class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-12 text-center"
+      {...motion({ preset: "scale-in", duration: 700 })}
+    >
+      <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+        Ready to ship?
+      </h2>
+      <p class="text-neutral-400 text-lg max-w-md mx-auto mb-0">
+        Drop <code>initMotion()</code> into your project and start animating.
+      </p>
+      <a
+        href="#"
+        class="inline-block bg-indigo-500 text-white font-semibold px-7 py-3 rounded-lg no-underline mt-6 transition-opacity duration-200 hover:opacity-85"
+      >
+        Get started
+      </a>
+    </div>
+  </section>
+</Layout>

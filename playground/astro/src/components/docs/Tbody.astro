@@ -1,0 +1,7 @@
+---
+import { stagger } from "viewmotion";
+---
+
+<tbody {...stagger({ step: 50, delay: 100 })} {...Astro.props}>
+  <slot />
+</tbody>

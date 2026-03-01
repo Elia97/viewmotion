@@ -1,0 +1,38 @@
+---
+import "../../../../packages/viewmotion/src/styles.css";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "viewmotion — playground (Astro)" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body
+    class="bg-[#0d0d0d] text-[#e8e8e8] font-sans leading-relaxed antialiased"
+  >
+    <header class="sticky top-0 left-0 right-0 overflow-hidden h-16">
+      <nav class="container mx-auto flex items-center justify-between h-full">
+        <h1 class="text-lg font-bold">viewmotion</h1>
+        <ul class="flex items-center gap-4">
+          <li><a href="/">Home</a></li>
+          <li><a href="/docs/getting-started">Docs</a></li>
+        </ul>
+      </nav>
+    </header>
+    <slot />
+    <script>
+      import { initMotion } from "viewmotion";
+      const { scroll } = await initMotion();
+      // scroll?.on('scroll', ({ progress }) => console.log(progress))
+    </script>
+  </body>
+</html>

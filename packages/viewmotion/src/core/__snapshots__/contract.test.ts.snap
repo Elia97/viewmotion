@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Contract: built-in presets are stable > preset keyframes mapping is stable 1`] = `
+[
+  {
+    "keyframes": "motion-fade",
+    "name": "fade",
+  },
+  {
+    "keyframes": "motion-fade-up",
+    "name": "fade-up",
+  },
+  {
+    "keyframes": "motion-fade-down",
+    "name": "fade-down",
+  },
+  {
+    "keyframes": "motion-slide-left",
+    "name": "slide-left",
+  },
+  {
+    "keyframes": "motion-slide-right",
+    "name": "slide-right",
+  },
+  {
+    "keyframes": "motion-scale-in",
+    "name": "scale-in",
+  },
+  {
+    "keyframes": "motion-zoom-out",
+    "name": "zoom-out",
+  },
+  {
+    "keyframes": "motion-blur-in",
+    "name": "blur-in",
+  },
+]
+`;
+
+exports[`Contract: motion() output > motion() serializes all config fields 1`] = `
+{
+  "delay": 100,
+  "duration": 700,
+  "once": true,
+  "preset": "fade-up",
+}
+`;
+
+exports[`Contract: stagger() output > stagger() serializes config correctly 1`] = `
+{
+  "delay": 80,
+  "step": 50,
+}
+`;

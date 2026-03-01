@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>viewmotion — playground</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0d0d0d;
+        --surface: #161616;
+        --border: #2a2a2a;
+        --text: #e8e8e8;
+        --muted: #888;
+        --accent: #6366f1;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        line-height: 1.6;
+      }
+
+      /* ─── Layout ─── */
+      section {
+        padding: 6rem 2rem;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 2rem;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: var(--muted);
+        font-size: 1.1rem;
+        max-width: 540px;
+        margin-bottom: 1rem;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #1e1e2e;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        margin-bottom: 1.5rem;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      /* ─── Feature list ─── */
+      .feature-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .feature-item:last-child {
+        border-bottom: none;
+      }
+
+      .feature-icon {
+        flex-shrink: 0;
+        width: 2rem;
+        height: 2rem;
+        background: var(--accent);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+      }
+
+      /* ─── Card grid ─── */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: border-color 200ms;
+      }
+
+      .card:hover {
+        border-color: var(--accent);
+      }
+
+      .card-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+
+      .card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .card p {
+        font-size: 0.875rem;
+        margin-bottom: 0;
+      }
+
+      /* ─── CTA ─── */
+      .cta-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 3rem;
+        text-align: center;
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 1.5rem;
+        transition: opacity 200ms;
+      }
+
+      .btn:hover {
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ─── HERO (above the fold) ─── -->
+    <div class="hero">
+      <div data-motion='{"preset":"fade-up","duration":700}'>
+        <span class="badge">viewmotion v0.0.1</span>
+      </div>
+
+      <h1 data-motion='{"preset":"fade-up","delay":100,"duration":700}'>
+        Minimal motion<br />for the modern web.
+      </h1>
+
+      <p data-motion='{"preset":"fade-up","delay":200,"duration":700}'>
+        Framework-agnostic reveal animations powered by
+        <code>IntersectionObserver</code>, CSS animations, and zero runtime
+        dependencies.
+      </p>
+
+      <p data-motion='{"preset":"fade","delay":350,"duration":800}'>
+        Scroll down to see animations trigger ↓
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ─── SECTION 1 — What it does ─── -->
+    <section>
+      <h2 data-motion='{"preset":"slide-left","duration":600}'>What it does</h2>
+      <p data-motion='{"preset":"fade-up","delay":100}'>
+        viewmotion observes elements entering the viewport and applies a CSS
+        class that triggers a smooth transition. No scroll events. No polling.
+        One observer.
+      </p>
+
+      <div style="margin-top: 2rem">
+        <div
+          class="feature-item"
+          data-motion='{"preset":"slide-left","delay":0,"duration":500}'
+        >
+          <div class="feature-icon">✦</div>
+          <div>
+            <strong>IntersectionObserver</strong>
+            <p>Single global observer for all animated elements.</p>
+          </div>
+        </div>
+        <div
+          class="feature-item"
+          data-motion='{"preset":"slide-left","delay":80,"duration":500}'
+        >
+          <div class="feature-icon">⚡</div>
+          <div>
+            <strong>Zero dependencies</strong>
+            <p>No GSAP. No scroll libraries. Just the platform.</p>
+          </div>
+        </div>
+        <div
+          class="feature-item"
+          data-motion='{"preset":"slide-left","delay":160,"duration":500}'
+        >
+          <div class="feature-icon">♿</div>
+          <div>
+            <strong>Accessible</strong>
+            <p>Respects <code>prefers-reduced-motion</code> out of the box.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ─── SECTION 2 — How to use ─── -->
+    <section>
+      <h2 data-motion='{"preset":"fade-up","duration":600}'>
+        Drop-in HTML API
+      </h2>
+      <p data-motion='{"preset":"fade-up","delay":100}'>
+        Animate any element by adding a <code>data-motion</code> attribute. No
+        JavaScript configuration required.
+      </p>
+
+      <div
+        data-motion='{"preset":"scale-in","delay":150,"duration":600}'
+        style="
+          margin-top: 2rem;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 1.5rem;
+          font-family: monospace;
+          font-size: 0.9rem;
+          line-height: 2;
+          color: var(--text);
+        "
+      >
+        <div>
+          &lt;h2
+          <span style="color: #6366f1">data-motion</span
+          >='{"preset":"fade-up"}'&gt;
+        </div>
+        <div>
+          &lt;p
+          <span style="color: #6366f1">data-motion</span
+          >='{"preset":"fade-up","delay":100}'&gt;
+        </div>
+        <div>
+          &lt;ul
+          <span style="color: #6366f1">data-stagger</span>='{"delay":80}'&gt;
+        </div>
+        <div>
+          &lt;li
+          <span style="color: #6366f1">data-motion</span
+          >='{"preset":"fade-up","once":true}'&gt;
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ─── SECTION 3 — All presets showcase ─── -->
+    <section>
+      <h2 data-motion='{"preset":"fade-up","duration":600}'>All presets</h2>
+      <p data-motion='{"preset":"fade-up","delay":80}'>
+        Scroll through to see each animation. Every box uses a different preset.
+      </p>
+
+      <div class="card-grid" style="margin-top: 2rem">
+        <div class="card" data-motion='{"preset":"fade"}'>
+          <div class="card-number" style="font-size: 1.1rem">fade</div>
+          <p>Pure opacity, no movement.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number" style="font-size: 1.1rem">fade-up</div>
+          <p>Opacity + rises 24 px.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-down"}'>
+          <div class="card-number" style="font-size: 1.1rem">fade-down</div>
+          <p>Opacity + drops 24 px from top.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"slide-left"}'>
+          <div class="card-number" style="font-size: 1.1rem">slide-left</div>
+          <p>Opacity + enters from left 32 px.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"slide-right"}'>
+          <div class="card-number" style="font-size: 1.1rem">slide-right</div>
+          <p>Opacity + enters from right 32 px.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"scale-in"}'>
+          <div class="card-number" style="font-size: 1.1rem">scale-in</div>
+          <p>Opacity + scales up from 92%.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"zoom-out"}'>
+          <div class="card-number" style="font-size: 1.1rem">zoom-out</div>
+          <p>Opacity + shrinks from 108%.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"blur-in"}'>
+          <div class="card-number" style="font-size: 1.1rem">blur-in</div>
+          <p>Opacity + blur from 6 px.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ─── SECTION 4 — Stagger card grid ─── -->
+    <section>
+      <h2 data-motion='{"preset":"fade-up","duration":600}'>Stagger grid</h2>
+      <p data-motion='{"preset":"fade-up","delay":80}'>
+        Add <code>data-stagger</code> to a container and all direct children
+        animate in with an automatic delay offset.
+      </p>
+
+      <div
+        class="card-grid"
+        data-stagger='{"delay":100}'
+        style="margin-top: 2rem"
+      >
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">01</div>
+          <h3>Observer</h3>
+          <p>One IntersectionObserver for all elements.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">02</div>
+          <h3>Presets</h3>
+          <p>8 built-in presets, extensible with registerPreset().</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">03</div>
+          <h3>Reduced motion</h3>
+          <p>Instant reveal for accessibility preferences.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">04</div>
+          <h3>Zero deps</h3>
+          <p>No runtime dependencies. Pure platform APIs.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">05</div>
+          <h3>SSR-ready</h3>
+          <p>Works over static HTML and server-rendered pages.</p>
+        </div>
+        <div class="card" data-motion='{"preset":"fade-up"}'>
+          <div class="card-number">06</div>
+          <h3>Extensible</h3>
+          <p>Clean architecture ready for V2 features.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ─── CTA ─── -->
+    <section>
+      <div class="cta-box" data-motion='{"preset":"scale-in","duration":700}'>
+        <h2>Ready to ship?</h2>
+        <p style="margin: 0 auto; text-align: center">
+          Drop <code>initMotion()</code> into your project and start animating.
+        </p>
+        <a href="#" class="btn">Get started</a>
+      </div>
+    </section>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

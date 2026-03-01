@@ -1,0 +1,120 @@
+---
+layout: "../../layouts/DocsLayout.astro"
+title: "Getting Started — viewmotion"
+description: "How to install and use viewmotion in your project."
+---
+
+import H1 from "../../components/docs/H1.astro";
+import H2 from "../../components/docs/H2.astro";
+import H3 from "../../components/docs/H3.astro";
+import P from "../../components/docs/P.astro";
+import Pre from "../../components/docs/Pre.astro";
+import Tbody from "../../components/docs/Tbody.astro";
+import Tr from "../../components/docs/Tr.astro";
+import Blockquote from "../../components/docs/Blockquote.astro";
+
+export const components = {
+  h1: H1,
+  h2: H2,
+  h3: H3,
+  p: P,
+  pre: Pre,
+  tbody: Tbody,
+  tr: Tr,
+  blockquote: Blockquote,
+};
+
+# Getting Started
+
+**viewmotion** is a lightweight scroll-animation library for the web. Zero dependencies on your end — Lenis smooth scroll is bundled automatically.
+
+## Installation
+
+```bash
+npm install viewmotion
+```
+
+Then import the CSS once in your app entry point:
+
+```ts
+import "viewmotion/styles.css";
+```
+
+---
+
+## Basic Usage
+
+Call `initMotion()` after the DOM is ready:
+
+```ts
+import { initMotion } from "viewmotion";
+
+initMotion();
+```
+
+Add `data-motion` to any element using the `motion()` helper:
+
+```astro
+---
+import { motion } from "viewmotion";
+---
+
+<h1 {...motion({ preset: "fade-up" })}>Hello world</h1>
+```
+
+Or directly in HTML:
+
+```html
+<div data-motion='{"preset":"fade-up"}'></div>
+```
+
+---
+
+## Available Presets
+
+| Preset        | Effect                   |
+| ------------- | ------------------------ |
+| `fade`        | Fade in from transparent |
+| `fade-up`     | Fade in + slide up       |
+| `fade-down`   | Fade in + slide down     |
+| `slide-left`  | Slide in from right      |
+| `slide-right` | Slide in from left       |
+| `scale-in`    | Scale up from 95%        |
+| `zoom-out`    | Scale down from 110%     |
+| `blur-in`     | Fade in + blur clear     |
+
+## Stagger Groups
+
+Wrap children in a stagger container using the `stagger()` helper:
+
+```astro
+---
+import { stagger, motion } from "viewmotion";
+---
+
+<ul {...stagger({ delay: 100, step: 80 })}>
+  <li {...motion({ preset: "fade-up" })}>Item 1</li>
+  <li {...motion({ preset: "fade-up" })}>Item 2</li>
+  <li {...motion({ preset: "fade-up" })}>Item 3</li>
+</ul>
+```
+
+---
+
+## initMotion() Options
+
+```ts
+initMotion({
+  rootMargin: "0px 0px -80px 0px", // IntersectionObserver margin
+  threshold: 0.1, // visibility threshold
+  defaultDuration: 600, // ms
+  defaultDelay: 0, // ms
+  smoothScroll: true, // enable Lenis (default: true)
+  scroll: {
+    lerp: 0.1, // smoothing factor
+    smoothWheel: true,
+  },
+});
+```
+
+> `initMotion()` returns `{ scroll: Lenis | null }` so you can hook into scroll events.

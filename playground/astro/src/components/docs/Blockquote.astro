@@ -1,0 +1,10 @@
+---
+import { motion } from "viewmotion";
+---
+
+<blockquote
+  {...motion({ preset: "slide-right", duration: 500, once: true })}
+  {...Astro.props}
+>
+  <slot />
+</blockquote>
