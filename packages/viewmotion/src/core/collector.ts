@@ -48,9 +48,35 @@ function expandStaggerContainer(
 
   const children = Array.from(container.children) as HTMLElement[];
   children.forEach((child, index) => {
+    // Set stagger delay first so normalizeMotionAttr won't override it
     child.dataset["delay"] = String(baseDelay + index * step);
+    // Rewrite JSON data-motion to plain preset name so CSS selectors match
+    normalizeMotionAttr(child);
     result.push(child);
   });
+}
+
+/**
+ * Normalise the data-motion attribute of a single element in place.
+ * Rewrites JSON object values (e.g. '{"preset":"fade-up","duration":600}')
+ * to the bare preset name ("fade-up") so CSS attribute selectors can match.
+ * Skips elements that already have a plain preset string or no attribute.
+ * Does NOT overwrite data-delay (already set by stagger logic).
+ */
+function normalizeMotionAttr(el: HTMLElement): void {
+  const raw = el.dataset["motion"];
+  if (!raw || !raw.startsWith("{")) return;
+
+  const parsed = parseMotionAttribute(raw);
+  if (!parsed.ok) return;
+
+  const { config } = parsed;
+  el.dataset["motion"] = config.preset;
+
+  if (config.duration !== undefined && !el.dataset["duration"])
+    el.dataset["duration"] = String(config.duration);
+  if (config.once !== undefined && !el.dataset["once"])
+    el.dataset["once"] = String(config.once);
 }
 
 /**

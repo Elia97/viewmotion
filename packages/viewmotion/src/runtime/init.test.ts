@@ -146,4 +146,47 @@ describe("initMotion()", () => {
     await initMotion({ defaultDelay: 200 });
     expect(el.style.getPropertyValue("--motion-delay")).toBe("200ms");
   });
+
+  it("normalises JSON data-motion on stagger children so CSS selectors match", async () => {
+    // Simulates what motion() produces: data-motion='{"preset":"fade-up"}'
+    const container = document.createElement("ul");
+    container.dataset["stagger"] = JSON.stringify({ delay: 100, step: 60 });
+
+    const child1 = document.createElement("li");
+    child1.dataset["motion"] = JSON.stringify({ preset: "fade-up" });
+    const child2 = document.createElement("li");
+    child2.dataset["motion"] = JSON.stringify({
+      preset: "slide-left",
+      duration: 500,
+    });
+
+    container.appendChild(child1);
+    container.appendChild(child2);
+    document.body.appendChild(container);
+
+    for (const child of [child1, child2]) {
+      vi.spyOn(child, "getBoundingClientRect").mockReturnValue({
+        top: 2000,
+        bottom: 2100,
+        left: 0,
+        right: 0,
+        width: 100,
+        height: 100,
+        toJSON: () => ({}),
+      } as DOMRect);
+    }
+
+    await initMotion();
+
+    // data-motion must be the plain preset name, not a JSON string
+    expect(child1.dataset["motion"]).toBe("fade-up");
+    expect(child2.dataset["motion"]).toBe("slide-left");
+
+    // Stagger delays must be applied (100 + 0*60 = 100, 100 + 1*60 = 160)
+    expect(child1.dataset["delay"]).toBe("100");
+    expect(child2.dataset["delay"]).toBe("160");
+
+    // duration from JSON config must be preserved on child2
+    expect(child2.dataset["duration"]).toBe("500");
+  });
 });
