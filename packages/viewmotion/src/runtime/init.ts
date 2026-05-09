@@ -18,11 +18,11 @@ import { isSSR, isReducedMotion, waitForLoad } from "../utils/guards.js";
  * single `IntersectionObserver`, and reveals elements as they enter the
  * viewport via CSS animations.
  *
- * By default also enables Lenis smooth scroll — pass `{ smoothScroll: false }`
- * to opt out.
+ * Lenis smooth scroll is **disabled by default**. Pass `{ smoothScroll: true }`
+ * to opt in (requires `lenis` to be installed as a dependency).
  *
  * Returns a cleanup handle:
- * - `scroll` — the Lenis instance (or `null` if smooth scroll is disabled).
+ * - `scroll` — the Lenis instance (or `null` when smooth scroll is disabled).
  * - `destroy()` — disconnects the observer and (optionally) destroys Lenis.
  *   Call this in SPA route teardown to avoid memory leaks.
  *
@@ -33,7 +33,7 @@ import { isSSR, isReducedMotion, waitForLoad } from "../utils/guards.js";
  * ```ts
  * import { initMotion } from 'viewmotion'
  *
- * const { destroy } = await initMotion({ smoothScroll: false })
+ * const { destroy } = await initMotion({ smoothScroll: true })
  *
  * // Later, in cleanup:
  * destroy()
@@ -45,9 +45,10 @@ export async function initMotion(
   // SSR guard — no-op on the server.
   if (isSSR()) return { scroll: null, destroy() {} };
 
-  // Smooth scroll — dynamic import keeps Lenis out of SSR bundles.
+  // Smooth scroll is opt-in — dynamic import keeps Lenis out of bundles
+  // when not requested.
   let scroll: Lenis | null = null;
-  if (options?.smoothScroll !== false) {
+  if (options?.smoothScroll === true) {
     const { initScroll } = await import("./scroll.js");
     scroll = initScroll(options?.scroll);
   }

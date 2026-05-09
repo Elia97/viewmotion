@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { initMotion } from "../runtime/init";
+import { initScroll } from "./scroll.js";
 
 // Mock the scroll module so Lenis is never instantiated in unit tests
 vi.mock("./scroll.js", () => ({
@@ -84,6 +85,20 @@ describe("initMotion()", () => {
   it("does nothing when no [data-motion] or [data-stagger] elements exist", async () => {
     await initMotion();
     expect(MockIntersectionObserver.instances).toHaveLength(0);
+  });
+
+  it("does NOT initialise Lenis by default (smoothScroll opt-in)", async () => {
+    vi.mocked(initScroll).mockClear();
+    const { scroll } = await initMotion();
+    expect(initScroll).not.toHaveBeenCalled();
+    expect(scroll).toBeNull();
+  });
+
+  it("initialises Lenis only when smoothScroll: true", async () => {
+    vi.mocked(initScroll).mockClear();
+    const { scroll } = await initMotion({ smoothScroll: true });
+    expect(initScroll).toHaveBeenCalledOnce();
+    expect(scroll).not.toBeNull();
   });
 
   it("reveals all immediately when prefers-reduced-motion is set", async () => {

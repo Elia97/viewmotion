@@ -18,11 +18,11 @@ export interface MotionOptions {
   /** Default transition delay in ms for all elements (default: 0) */
   readonly defaultDelay?: number;
   /**
-   * Enable Lenis smooth scroll (default: true).
-   * Pass false to disable if you manage your own scroll library.
+   * Enable Lenis smooth scroll (default: false).
+   * Pass true to opt in — requires `lenis` to be installed.
    */
   readonly smoothScroll?: boolean;
-  /** Options forwarded to the Lenis constructor. Only used when smoothScroll !== false. */
+  /** Options forwarded to the Lenis constructor. Only used when smoothScroll === true. */
   readonly scroll?: ScrollOptions;
 }
 

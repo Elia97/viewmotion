@@ -115,7 +115,7 @@ const { scroll, destroy } = await initMotion({
   threshold: 0.15, // IntersectionObserver threshold
   defaultDuration: 700, // default animation duration (ms)
   defaultDelay: 50, // default animation delay (ms)
-  smoothScroll: true, // enable Lenis (default: true, requires lenis)
+  smoothScroll: true, // enable Lenis (default: false, requires lenis)
   scroll: {
     // Lenis options
     lerp: 0.08,

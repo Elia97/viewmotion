@@ -44,7 +44,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
-    "viewmotion": "workspace:^",
+    "viewmotion": ">=0.1.0",
     "svelte": ">=4"
   },
   "devDependencies": {
