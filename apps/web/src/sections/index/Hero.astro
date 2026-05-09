@@ -1,6 +1,7 @@
 ---
 import { motion } from "viewmotion";
 import InstallSnippet from "../../components/InstallSnippet.astro";
+import { VIEWMOTION_VERSION } from "@/lib/version";
 
 // Header is sticky h-14 (3.5rem). Hero fills the remaining viewport.
 ---
@@ -27,7 +28,7 @@ import InstallSnippet from "../../components/InstallSnippet.astro";
             class="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"
           ></span>
         </span>
-        v0.1.1 — Stable on npm
+        v{VIEWMOTION_VERSION} — Stable on npm
       </span>
     </div>
 

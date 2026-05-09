@@ -183,15 +183,18 @@ const editUrl = editBase + editRelPath;
   <SiteFooter />
 
   <script>
-    import { initMotion } from "viewmotion";
+    import { initMotion, type MotionCleanup } from "viewmotion";
 
-    // Module-level reference so we can disconnect the previous observer
-    // before creating a new one on each SPA navigation.
+    // Module-level references so we can tear down the previous Lenis
+    // instance + observer before creating a new one on SPA navigation.
     let tocObserver: IntersectionObserver | null = null;
+    let currentCleanup: MotionCleanup | null = null;
 
     document.addEventListener("astro:before-swap", () => {
       tocObserver?.disconnect();
       tocObserver = null;
+      currentCleanup?.destroy();
+      currentCleanup = null;
     });
 
     document.addEventListener("astro:page-load", async () => {
@@ -232,12 +235,12 @@ const editUrl = editBase + editRelPath;
       // All animations (h1/h2/h3/p/blockquote/pre/tbody/tr/ul/li) are
       // server-rendered via src/components/docs/ Astro component overrides.
       try {
-        await initMotion({ smoothScroll: true });
+        currentCleanup = await initMotion({ smoothScroll: true });
       } catch {
         // Lenis (smooth scroll) may fail in some environments — reveal all
         // animated elements immediately as a fallback so nothing stays hidden.
         try {
-          await initMotion();
+          currentCleanup = await initMotion();
         } catch {
           document
             .querySelectorAll<HTMLElement>("[data-motion]")

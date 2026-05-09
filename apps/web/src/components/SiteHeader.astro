@@ -1,9 +1,12 @@
 ---
+import { VIEWMOTION_VERSION } from "@/lib/version";
+
 interface Props {
   variant?: "landing" | "docs";
 }
 
 const { variant = "landing" } = Astro.props;
+const versionMark = "v " + VIEWMOTION_VERSION.split(".").join("·");
 ---
 
 <header
@@ -17,7 +20,7 @@ const { variant = "landing" } = Astro.props;
     >
     <span
       class="hidden sm:inline font-mono text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground/80 transition-colors group-hover:text-primary"
-      >v 0·1·1</span
+      >{versionMark}</span
     >
   </a>
 

@@ -53,7 +53,18 @@ const { title, description } = Astro.props
   <SiteFooter />
 
   <script>
-    import { initMotion } from "viewmotion"
+    import { initMotion, type MotionCleanup } from "viewmotion"
+
+    // Module-scoped Lenis/observer cleanup, persists across SPA navigations
+    // because Astro <script> modules execute once and listeners persist.
+    let currentCleanup: MotionCleanup | null = null
+
+    // Tear down before the DOM swap so the previous Lenis instance doesn't
+    // keep its wheel listeners attached on the new page.
+    document.addEventListener("astro:before-swap", () => {
+      currentCleanup?.destroy()
+      currentCleanup = null
+    })
 
     document.addEventListener("astro:page-load", async () => {
       // Re-enable smooth scroll after scroll restoration is complete
@@ -62,7 +73,7 @@ const { title, description } = Astro.props
       })
 
       try {
-        await initMotion({
+        currentCleanup = await initMotion({
           smoothScroll: true,
           scroll: {
             lerp: 0.05,
@@ -77,7 +88,7 @@ const { title, description } = Astro.props
         // Lenis (smooth scroll) may fail in some browsers — retry without it.
         // This still normalizes data-motion attrs and runs IntersectionObserver.
         try {
-          await initMotion()
+          currentCleanup = await initMotion()
         } catch {
           // If even that fails, manually reveal all elements as last resort
           document
