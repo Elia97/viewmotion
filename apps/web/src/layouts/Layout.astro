@@ -12,7 +12,7 @@ const { title, description } = Astro.props
 ---
 
 <BaseLayout {title} {description}>
-  <SiteHeader variant="landing" />
+  <SiteHeader />
 
   <!-- Mobile navigation menu -->
   <div
@@ -56,8 +56,6 @@ const { title, description } = Astro.props
     import { initMotion, type MotionCleanup } from "viewmotion"
     import { initOrRefreshLenis } from "@/lib/scroll"
 
-    // viewmotion observer cleanup — recreated per page (new DOM = new elements).
-    // Lenis itself is a SPA-wide singleton handled by initOrRefreshLenis().
     let currentCleanup: MotionCleanup | null = null
 
     document.addEventListener("astro:before-swap", () => {
@@ -66,10 +64,7 @@ const { title, description } = Astro.props
     })
 
     document.addEventListener("astro:page-load", async () => {
-      // Lenis singleton: created on first call, refreshed (resize) on subsequent.
       initOrRefreshLenis()
-
-      // Re-enable native scroll restoration / behaviour
       document.documentElement.style.scrollBehavior = ""
 
       try {

@@ -1,9 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import SiteHeader from "../components/SiteHeader.astro";
+import DocsHeader from "../components/DocsHeader.astro";
 import DocsSidebar from "../components/DocsSidebar.astro";
 import { motion } from "viewmotion";
-import SiteFooter from "@/components/SiteFooter.astro";
 import "../styles/docs.css";
 
 interface Props {
@@ -83,8 +82,8 @@ const editUrl = editBase + editRelPath;
   description={description}
   canonical={`https://viewmotion.vercel.app${normPath}`}
 >
-  <SiteHeader variant="docs" />
-  <div class="flex min-h-[calc(100vh-4rem)]">
+  <DocsHeader />
+  <div class="flex min-h-[calc(100vh-4rem)] pt-14">
     <!-- Sidebar -->
     <DocsSidebar currentPage={currentPage} />
 
@@ -180,14 +179,11 @@ const editUrl = editBase + editRelPath;
     </div>
   </div>
 
-  <SiteFooter />
 
   <script>
     import { initMotion, type MotionCleanup } from "viewmotion";
     import { initOrRefreshLenis } from "@/lib/scroll";
 
-    // viewmotion observer cleanup — recreated per page.
-    // Lenis itself is a SPA-wide singleton handled by initOrRefreshLenis().
     let tocObserver: IntersectionObserver | null = null;
     let currentCleanup: MotionCleanup | null = null;
 
@@ -199,7 +195,6 @@ const editUrl = editBase + editRelPath;
     });
 
     document.addEventListener("astro:page-load", async () => {
-      // Lenis singleton: created on first call, refreshed on subsequent.
       initOrRefreshLenis();
 
       // ── 1. Copy-to-clipboard for code blocks ────────────────────
