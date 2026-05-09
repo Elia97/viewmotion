@@ -198,6 +198,11 @@ const editUrl = editBase + editRelPath;
     });
 
     document.addEventListener("astro:page-load", async () => {
+      // Snap scroll to top synchronously so Lenis reads a stable position
+      // (avoids first-wheel jump after SPA navigation).
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      await new Promise<void>((r) => requestAnimationFrame(() => r()));
+
       // ── 1. Copy-to-clipboard for code blocks ────────────────────
       // The wrapper (.code-block-wrapper) and data-motion attributes are
       // server-rendered by src/components/docs/Pre.astro — we only add

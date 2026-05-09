@@ -67,10 +67,14 @@ const { title, description } = Astro.props
     })
 
     document.addEventListener("astro:page-load", async () => {
+      // Snap scroll to top synchronously so Lenis reads a stable position
+      // (avoids first-wheel jump after SPA navigation when the previous
+      // page's scrollY hasn't been fully reset yet).
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" })
+      await new Promise<void>((r) => requestAnimationFrame(() => r()))
+
       // Re-enable smooth scroll after scroll restoration is complete
-      requestAnimationFrame(() => {
-        document.documentElement.style.scrollBehavior = ""
-      })
+      document.documentElement.style.scrollBehavior = ""
 
       try {
         currentCleanup = await initMotion({
