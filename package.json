@@ -7,9 +7,14 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "turbo format",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo build --filter=./packages/* && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.4",
