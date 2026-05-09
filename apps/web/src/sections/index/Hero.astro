@@ -1,31 +1,28 @@
 ---
-import { motion } from "viewmotion";
-import InstallSnippet from "../../components/InstallSnippet.astro";
-import { VIEWMOTION_VERSION } from "@/lib/version";
+import { motion } from "viewmotion"
+import InstallSnippet from "../../components/InstallSnippet.astro"
+import { VIEWMOTION_VERSION } from "@/lib/version"
 
 // Header is sticky h-14 (3.5rem). Hero fills the remaining viewport.
 ---
 
 <section
-  class="relative border-b border-border flex items-center"
+  class="relative flex items-center border-b border-border"
   style="min-height: calc(100svh - 3.5rem); max-height: calc(100svh - 3.5rem);"
 >
   <div
-    class="relative mx-auto w-full max-w-6xl px-6 sm:px-10 lg:px-14 py-10 lg:py-14"
+    class="relative mx-auto w-full max-w-6xl px-6 py-10 sm:px-10 lg:px-14 lg:py-14"
   >
     <!-- Status badge -->
-    <div
-      {...motion({ preset: "fade-down", delay: 200, duration: 600 })}
-    >
+    <div {...motion({ preset: "fade-down", delay: 200, duration: 600 })}>
       <span
-        class="inline-flex items-center gap-2.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground"
+        class="inline-flex items-center gap-2.5 font-mono text-[0.7rem] tracking-[0.14em] text-muted-foreground uppercase"
       >
         <span class="relative flex h-1.5 w-1.5">
           <span
             class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60"
           ></span>
-          <span
-            class="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"
           ></span>
         </span>
         v{VIEWMOTION_VERSION} — Stable on npm
@@ -34,7 +31,7 @@ import { VIEWMOTION_VERSION } from "@/lib/version";
 
     <!-- Headline -->
     <h1
-      class="mt-6 text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] tracking-[-0.025em] font-medium max-w-4xl"
+      class="mt-6 max-w-4xl text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] font-medium tracking-tight"
       style="font-variation-settings: 'opsz' 96, 'SOFT' 50, 'WONK' 0;"
       {...motion({ preset: "fade-up", delay: 320, duration: 700 })}
     >
@@ -44,15 +41,15 @@ import { VIEWMOTION_VERSION } from "@/lib/version";
 
     <!-- Lede -->
     <p
-      class="mt-5 max-w-2xl text-base sm:text-[1.05rem] leading-relaxed text-foreground/75"
+      class="mt-5 max-w-2xl text-base leading-relaxed text-foreground/75 sm:text-[1.05rem]"
       {...motion({ preset: "fade-up", delay: 440, duration: 600 })}
     >
       A single <code class="font-mono text-[0.92em] text-foreground"
         >IntersectionObserver</code
       > and CSS keyframes — under <span class="font-mono text-foreground"
         >2&thinsp;KB</span
-      > gzipped, with zero runtime dependencies. Drop it into React, Vue,
-      Svelte, Astro, or plain HTML.
+      > gzipped, with zero runtime dependencies. Drop it into React, Vue, Svelte,
+      Astro, or plain HTML.
     </p>
 
     <!-- CTAs -->
@@ -62,11 +59,11 @@ import { VIEWMOTION_VERSION } from "@/lib/version";
     >
       <a
         href="/docs"
-        class="group inline-flex items-center gap-2.5 bg-foreground text-background h-12 px-5 rounded-lg text-sm font-medium tracking-tight transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
+        class="group inline-flex h-12 items-center gap-2.5 rounded-lg bg-foreground px-5 text-sm font-medium tracking-tight text-background transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
       >
         Read the docs
         <svg
-          class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+          class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
@@ -87,29 +84,29 @@ import { VIEWMOTION_VERSION } from "@/lib/version";
     >
       <hr class="hairline mb-5" />
       <dl
-        class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 font-mono text-[0.68rem] uppercase tracking-[0.14em]"
+        class="grid grid-cols-2 gap-x-6 gap-y-4 font-mono text-[0.68rem] tracking-[0.14em] uppercase sm:grid-cols-4"
       >
         <div>
           <dt class="text-muted-foreground/70">Bundle</dt>
-          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+          <dd class="mt-1 text-[0.85rem] tracking-tight text-foreground">
             &lt; 2 KB <span class="text-muted-foreground">gzip</span>
           </dd>
         </div>
         <div>
           <dt class="text-muted-foreground/70">Runtime deps</dt>
-          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+          <dd class="mt-1 text-[0.85rem] tracking-tight text-foreground">
             Zero
           </dd>
         </div>
         <div>
           <dt class="text-muted-foreground/70">SSR</dt>
-          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+          <dd class="mt-1 text-[0.85rem] tracking-tight text-foreground">
             Native&nbsp;safe
           </dd>
         </div>
         <div>
           <dt class="text-muted-foreground/70">Adapters</dt>
-          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+          <dd class="mt-1 text-[0.85rem] tracking-tight text-foreground">
             React · Vue · Svelte
           </dd>
         </div>
@@ -119,7 +116,7 @@ import { VIEWMOTION_VERSION } from "@/lib/version";
 
   <!-- Scroll mark, bottom-right -->
   <div
-    class="pointer-events-none absolute bottom-3 right-6 sm:right-10 lg:right-14 flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.22em] text-muted-foreground/60 font-mono"
+    class="pointer-events-none absolute right-6 bottom-3 flex items-center gap-2 font-mono text-[0.6rem] tracking-[0.22em] text-muted-foreground/60 uppercase sm:right-10 lg:right-14"
     aria-hidden="true"
   >
     <span class="block h-px w-10 bg-primary"></span>

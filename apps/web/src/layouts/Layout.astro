@@ -54,51 +54,31 @@ const { title, description } = Astro.props
 
   <script>
     import { initMotion, type MotionCleanup } from "viewmotion"
+    import { initOrRefreshLenis } from "@/lib/scroll"
 
-    // Module-scoped Lenis/observer cleanup, persists across SPA navigations
-    // because Astro <script> modules execute once and listeners persist.
+    // viewmotion observer cleanup — recreated per page (new DOM = new elements).
+    // Lenis itself is a SPA-wide singleton handled by initOrRefreshLenis().
     let currentCleanup: MotionCleanup | null = null
 
-    // Tear down before the DOM swap so the previous Lenis instance doesn't
-    // keep its wheel listeners attached on the new page.
     document.addEventListener("astro:before-swap", () => {
       currentCleanup?.destroy()
       currentCleanup = null
     })
 
     document.addEventListener("astro:page-load", async () => {
-      // Snap scroll to top synchronously so Lenis reads a stable position
-      // (avoids first-wheel jump after SPA navigation when the previous
-      // page's scrollY hasn't been fully reset yet).
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" })
-      await new Promise<void>((r) => requestAnimationFrame(() => r()))
+      // Lenis singleton: created on first call, refreshed (resize) on subsequent.
+      initOrRefreshLenis()
 
-      // Re-enable smooth scroll after scroll restoration is complete
+      // Re-enable native scroll restoration / behaviour
       document.documentElement.style.scrollBehavior = ""
 
       try {
-        currentCleanup = await initMotion({
-          smoothScroll: true,
-          scroll: {
-            lerp: 0.05,
-            wheelMultiplier: 1.5,
-          },
-        })
+        currentCleanup = await initMotion()
       } catch (err) {
-        console.error(
-          "[viewmotion] initMotion failed, retrying without smooth scroll:",
-          err
-        )
-        // Lenis (smooth scroll) may fail in some browsers — retry without it.
-        // This still normalizes data-motion attrs and runs IntersectionObserver.
-        try {
-          currentCleanup = await initMotion()
-        } catch {
-          // If even that fails, manually reveal all elements as last resort
-          document
-            .querySelectorAll<HTMLElement>("[data-motion]")
-            .forEach((el) => el.classList.add("motion-in"))
-        }
+        console.error("[viewmotion] initMotion failed:", err)
+        document
+          .querySelectorAll<HTMLElement>("[data-motion]")
+          .forEach((el) => el.classList.add("motion-in"))
       }
 
       // ── Mobile nav toggle ──────────────────────────────────────────

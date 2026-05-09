@@ -184,9 +184,10 @@ const editUrl = editBase + editRelPath;
 
   <script>
     import { initMotion, type MotionCleanup } from "viewmotion";
+    import { initOrRefreshLenis } from "@/lib/scroll";
 
-    // Module-level references so we can tear down the previous Lenis
-    // instance + observer before creating a new one on SPA navigation.
+    // viewmotion observer cleanup — recreated per page.
+    // Lenis itself is a SPA-wide singleton handled by initOrRefreshLenis().
     let tocObserver: IntersectionObserver | null = null;
     let currentCleanup: MotionCleanup | null = null;
 
@@ -198,10 +199,8 @@ const editUrl = editBase + editRelPath;
     });
 
     document.addEventListener("astro:page-load", async () => {
-      // Snap scroll to top synchronously so Lenis reads a stable position
-      // (avoids first-wheel jump after SPA navigation).
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      await new Promise<void>((r) => requestAnimationFrame(() => r()));
+      // Lenis singleton: created on first call, refreshed on subsequent.
+      initOrRefreshLenis();
 
       // ── 1. Copy-to-clipboard for code blocks ────────────────────
       // The wrapper (.code-block-wrapper) and data-motion attributes are
@@ -240,17 +239,11 @@ const editUrl = editBase + editRelPath;
       // All animations (h1/h2/h3/p/blockquote/pre/tbody/tr/ul/li) are
       // server-rendered via src/components/docs/ Astro component overrides.
       try {
-        currentCleanup = await initMotion({ smoothScroll: true });
+        currentCleanup = await initMotion();
       } catch {
-        // Lenis (smooth scroll) may fail in some environments — reveal all
-        // animated elements immediately as a fallback so nothing stays hidden.
-        try {
-          currentCleanup = await initMotion();
-        } catch {
-          document
-            .querySelectorAll<HTMLElement>("[data-motion]")
-            .forEach((el) => el.classList.add("motion-in"));
-        }
+        document
+          .querySelectorAll<HTMLElement>("[data-motion]")
+          .forEach((el) => el.classList.add("motion-in"));
       }
 
       // ── 4. Mobile sidebar toggle ──────────────────────────────────
