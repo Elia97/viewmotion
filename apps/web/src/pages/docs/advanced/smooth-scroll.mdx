@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Smooth scroll — viewmotion docs
+description: Integrate viewmotion with Lenis for smooth scroll animations.
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Smooth scroll
+
+<p class="text-neutral-500 text-sm font-mono mb-2">Lenis integration</p>
+
+viewmotion includes optional smooth scroll support powered by
+[Lenis](https://lenis.darkroom.engineering/). When enabled, scroll behaviour becomes
+buttery-smooth and all reveal animations continue to work seamlessly.
+
+## Install Lenis
+
+Lenis is listed as an optional peer dependency:
+
+```bash
+npm install lenis
+```
+
+## Enable smooth scroll
+
+Pass `smoothScroll: true` to `initMotion()`:
+
+```js
+import { initMotion } from "viewmotion";
+
+initMotion({ smoothScroll: true });
+```
+
+## Custom Lenis options
+
+Pass a `scroll` object to customize Lenis behaviour:
+
+```js
+initMotion({
+  smoothScroll: true,
+  scroll: {
+    lerp: 0.08,
+    wheelMultiplier: 1,
+  },
+});
+```
+
+## Common Lenis options
+
+| Option        | Type      | Default      | Description                                        |
+| ------------- | --------- | ------------ | -------------------------------------------------- |
+| `lerp`        | `number`  | `0.1`        | Linear interpolation intensity (0–1)               |
+| `duration`    | `number`  | `1.2`        | Scroll animation duration (s)                      |
+| `smoothWheel` | `boolean` | `true`       | Enable smooth scrolling for mouse wheel            |
+| `orientation` | `string`  | `"vertical"` | Scroll orientation: `"vertical"` or `"horizontal"` |
+
+## Astro ViewTransitions
+
+When using Astro's `ClientRouter`, re-initialize on each navigation:
+
+```html
+<script>
+  import { initMotion } from "viewmotion";
+
+  document.addEventListener("astro:page-load", () => {
+    initMotion({ smoothScroll: true });
+  });
+</script>
+```
+
+## How it works
+
+When `smoothScroll` is enabled, viewmotion dynamically imports Lenis and creates a new
+instance. The IntersectionObserver continues to observe elements normally — it works
+with the transformed scroll position that Lenis generates.
+
+If Lenis is not installed and `smoothScroll` is enabled, viewmotion logs a console
+warning and falls back to native scroll.
+
+<NavLinks
+  prev={{ href: "/docs/adapters/astro", label: "Astro adapter" }}
+  next={{ href: "/docs/advanced/ssr", label: "SSR & Hydration" }}
+/>

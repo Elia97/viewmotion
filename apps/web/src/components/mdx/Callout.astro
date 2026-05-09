@@ -1,0 +1,60 @@
+---
+import { motion } from "viewmotion";
+
+/**
+ * Callout component for MDX docs pages.
+ * Usage:
+ *   <Callout type="tip">Text here</Callout>
+ *   <Callout type="warning">Text here</Callout>
+ *   <Callout type="note">Text here</Callout>
+ *   <Callout type="danger">Text here</Callout>
+ */
+interface Props {
+  type?: "tip" | "warning" | "note" | "danger";
+  title?: string;
+}
+
+const { type = "note", title } = Astro.props;
+
+const styles = {
+  tip: {
+    wrapper: "bg-indigo-500/5 border-indigo-500/20",
+    title: "text-indigo-300",
+    text: "text-indigo-200/80",
+    defaultTitle: "Tip",
+  },
+  warning: {
+    wrapper: "bg-amber-500/5 border-amber-500/20",
+    title: "text-amber-300",
+    text: "text-amber-200/70",
+    defaultTitle: "Warning",
+  },
+  note: {
+    wrapper: "bg-white/[0.02] border-white/[0.08]",
+    title: "text-neutral-300",
+    text: "text-neutral-400",
+    defaultTitle: "Note",
+  },
+  danger: {
+    wrapper: "bg-red-500/5 border-red-500/20",
+    title: "text-red-300",
+    text: "text-red-200/70",
+    defaultTitle: "Error",
+  },
+};
+
+const s = styles[type];
+const label = title ?? s.defaultTitle;
+---
+
+<div
+  class={`border rounded-xl p-5 my-6 ${s.wrapper}`}
+  {...motion({ preset: "fade-up", duration: 500, once: true })}
+>
+  <p class={`text-sm font-semibold mb-1 ${s.title}`}>{label}</p>
+  <div
+    class={`text-sm leading-relaxed ${s.text} [&_code]:text-current [&_a]:underline`}
+  >
+    <slot />
+  </div>
+</div>

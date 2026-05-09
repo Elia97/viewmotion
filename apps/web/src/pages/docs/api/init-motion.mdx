@@ -1,0 +1,83 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: "initMotion() — API reference — viewmotion docs"
+description: "API reference for the initMotion() function: initialization, configuration, and lifecycle."
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# initMotion()
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion/core</p>
+
+Initializes the global IntersectionObserver and scans the DOM for animated elements.
+This is the entry point of the library.
+
+## Signature
+
+```ts
+function initMotion(options?: InitMotionOptions): Promise<MotionCleanup>;
+```
+
+## Parameters
+
+| Parameter | Type                | Description                   |
+| --------- | ------------------- | ----------------------------- |
+| `options` | `InitMotionOptions` | Optional configuration object |
+
+## Return value
+
+Returns a `MotionCleanup` handle:
+
+| Property  | Type            | Description                                                                                                                    |
+| --------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `scroll`  | `Lenis \| null` | The Lenis instance (if `smoothScroll` is enabled), otherwise `null`                                                            |
+| `destroy` | `() => void`    | Teardown function — unobserves all elements and destroys the Lenis instance. Call on SPA route teardown to avoid memory leaks. |
+
+## Options
+
+| Property          | Type           | Default | Description                                                      |
+| ----------------- | -------------- | ------- | ---------------------------------------------------------------- |
+| `rootMargin`      | `string`       | `"0px"` | Margin around root (CSS margin syntax)                           |
+| `threshold`       | `number`       | `0.1`   | Visibility ratio to trigger animation                            |
+| `defaultDuration` | `number`       | —       | Default animation duration in ms for all elements                |
+| `defaultDelay`    | `number`       | —       | Default animation delay in ms for all elements                   |
+| `smoothScroll`    | `boolean`      | `true`  | Enable Lenis smooth scroll (requires `lenis` peer dep)           |
+| `scroll`          | `LenisOptions` | —       | Lenis configuration object (used when `smoothScroll` is enabled) |
+
+## Usage
+
+```ts
+// Basic
+const { destroy } = await initMotion();
+
+// With options
+const { scroll, destroy } = await initMotion({
+  rootMargin: "0px 0px -80px 0px",
+  threshold: 0.15,
+  defaultDuration: 700,
+  defaultDelay: 50,
+  smoothScroll: true,
+  scroll: {
+    lerp: 0.08,
+    wheelMultiplier: 1,
+  },
+});
+
+// SPA teardown — call on route change to avoid memory leaks
+destroy();
+```
+
+<Callout type="warning" title="Call after DOM is ready">
+  Call `initMotion()` after the DOM has parsed. In frameworks with client-side
+  navigation like Astro, call it on each `astro:page-load` event to handle route
+  changes.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/accessibility", label: "Accessibility" }}
+  next={{ href: "/docs/api/motion", label: "motion()" }}
+/>

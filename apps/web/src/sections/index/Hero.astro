@@ -1,0 +1,127 @@
+---
+import { motion } from "viewmotion";
+import InstallSnippet from "../../components/InstallSnippet.astro";
+
+// Header is sticky h-14 (3.5rem). Hero fills the remaining viewport.
+---
+
+<section
+  class="relative border-b border-border flex items-center"
+  style="min-height: calc(100svh - 3.5rem); max-height: calc(100svh - 3.5rem);"
+>
+  <div
+    class="relative mx-auto w-full max-w-6xl px-6 sm:px-10 lg:px-14 py-10 lg:py-14"
+  >
+    <!-- Status badge -->
+    <div
+      {...motion({ preset: "fade-down", delay: 200, duration: 600 })}
+    >
+      <span
+        class="inline-flex items-center gap-2.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground"
+      >
+        <span class="relative flex h-1.5 w-1.5">
+          <span
+            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60"
+          ></span>
+          <span
+            class="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"
+          ></span>
+        </span>
+        v0.1.1 — Stable on npm
+      </span>
+    </div>
+
+    <!-- Headline -->
+    <h1
+      class="mt-6 text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] tracking-[-0.025em] font-medium max-w-4xl"
+      style="font-variation-settings: 'opsz' 96, 'SOFT' 50, 'WONK' 0;"
+      {...motion({ preset: "fade-up", delay: 320, duration: 700 })}
+    >
+      Reveal animations for landing pages,
+      <span class="ink-cinnabar">in three lines of code.</span>
+    </h1>
+
+    <!-- Lede -->
+    <p
+      class="mt-5 max-w-2xl text-base sm:text-[1.05rem] leading-relaxed text-foreground/75"
+      {...motion({ preset: "fade-up", delay: 440, duration: 600 })}
+    >
+      A single <code class="font-mono text-[0.92em] text-foreground"
+        >IntersectionObserver</code
+      > and CSS keyframes — under <span class="font-mono text-foreground"
+        >2&thinsp;KB</span
+      > gzipped, with zero runtime dependencies. Drop it into React, Vue,
+      Svelte, Astro, or plain HTML.
+    </p>
+
+    <!-- CTAs -->
+    <div
+      class="mt-8 flex flex-wrap items-center gap-3"
+      {...motion({ preset: "fade-up", delay: 560, duration: 600 })}
+    >
+      <a
+        href="/docs"
+        class="group inline-flex items-center gap-2.5 bg-foreground text-background h-12 px-5 rounded-lg text-sm font-medium tracking-tight transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
+      >
+        Read the docs
+        <svg
+          class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 12h14M13 6l6 6-6 6"></path></svg
+        >
+      </a>
+      <InstallSnippet pkg="viewmotion" />
+    </div>
+
+    <!-- Hairline + technical stamps row -->
+    <div
+      class="mt-10 lg:mt-12"
+      {...motion({ preset: "fade", delay: 720, duration: 700 })}
+    >
+      <hr class="hairline mb-5" />
+      <dl
+        class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 font-mono text-[0.68rem] uppercase tracking-[0.14em]"
+      >
+        <div>
+          <dt class="text-muted-foreground/70">Bundle</dt>
+          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+            &lt; 2 KB <span class="text-muted-foreground">gzip</span>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground/70">Runtime deps</dt>
+          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+            Zero
+          </dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground/70">SSR</dt>
+          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+            Native&nbsp;safe
+          </dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground/70">Adapters</dt>
+          <dd class="mt-1 text-foreground text-[0.85rem] tracking-tight">
+            React · Vue · Svelte
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Scroll mark, bottom-right -->
+  <div
+    class="pointer-events-none absolute bottom-3 right-6 sm:right-10 lg:right-14 flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.22em] text-muted-foreground/60 font-mono"
+    aria-hidden="true"
+  >
+    <span class="block h-px w-10 bg-primary"></span>
+    Scroll
+  </div>
+</section>

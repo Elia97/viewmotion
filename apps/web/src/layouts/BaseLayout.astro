@@ -1,0 +1,91 @@
+---
+import "@workspace/ui/globals.css";
+import "viewmotion/styles.css";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  /** Forces `.dark` on `<html>`. Default false, driven by user preference. */
+  forceDark?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  title = "viewmotion — Minimal reveal animations for the modern web",
+  description = "A single IntersectionObserver, CSS @keyframes, and zero runtime dependencies. Framework-agnostic scroll-reveal animations under 2 KB gzipped.",
+  canonical = Astro.url.href,
+  ogImage = "/og-image.svg",
+  forceDark = false,
+  bodyClass = "bg-background text-foreground antialiased",
+} = Astro.props;
+---
+
+<html lang="en" class:list={[{ dark: forceDark }]}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+
+    <ClientRouter />
+
+    <!--
+      Theme init — runs before paint (anti-FOUC) and after every view-transition
+      swap so the dark class is never lost when navigating between pages.
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem("theme");
+          var dark =
+            s === "dark" ||
+            (!s && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (_) {}
+        // Disable smooth scroll during navigation to prevent jump-to-top artifact
+        document.documentElement.style.scrollBehavior = "auto";
+      })();
+
+      // Re-apply theme class after each ClientRouter page swap.
+      // Guard prevents duplicate listeners when this inline script re-runs
+      // on every SPA navigation (ClientRouter re-executes is:inline scripts).
+      if (!window.__vmAfterSwap) {
+        window.__vmAfterSwap = true;
+        document.addEventListener("astro:after-swap", function () {
+          try {
+            var s = localStorage.getItem("theme");
+            var dark =
+              s === "dark" ||
+              (!s && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            document.documentElement.classList.toggle("dark", dark);
+          } catch (_) {}
+        });
+      }
+    </script>
+
+    <!-- Extra head content -->
+    <slot name="head-extra" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

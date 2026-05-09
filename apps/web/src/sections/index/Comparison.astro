@@ -1,0 +1,144 @@
+---
+import { motion } from "viewmotion";
+import SectionHeader from "../../components/SectionHeader.astro";
+
+const rows = [
+  {
+    feature: "Bundle size",
+    viewmotion: "< 2 KB",
+    aos: "~ 14 KB",
+    animatecss: "~ 80 KB",
+    gsap: "~ 67 KB",
+    winner: true,
+  },
+  {
+    feature: "Zero dependencies",
+    viewmotion: "✓",
+    aos: "✓",
+    animatecss: "✓",
+    gsap: "✗",
+    winner: true,
+  },
+  {
+    feature: "SSR safe",
+    viewmotion: "✓",
+    aos: "⚠ Partial",
+    animatecss: "✓",
+    gsap: "⚠ Partial",
+    winner: true,
+  },
+  {
+    feature: "Framework adapters",
+    viewmotion: "✓",
+    aos: "✗",
+    animatecss: "✗",
+    gsap: "Partial",
+    winner: true,
+  },
+  {
+    feature: "prefers-reduced-motion",
+    viewmotion: "Automatic",
+    aos: "Manual",
+    animatecss: "Manual",
+    gsap: "Manual",
+    winner: true,
+  },
+  {
+    feature: "Custom presets API",
+    viewmotion: "✓",
+    aos: "✗",
+    animatecss: "✗",
+    gsap: "✓",
+    winner: true,
+  },
+  {
+    feature: "Stagger support",
+    viewmotion: "✓",
+    aos: "✗",
+    animatecss: "✗",
+    gsap: "✓",
+    winner: true,
+  },
+  {
+    feature: "TypeScript support",
+    viewmotion: "✓",
+    aos: "Partial",
+    animatecss: "✗",
+    gsap: "✓",
+    winner: true,
+  },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <SectionHeader
+      label="Comparison"
+      heading={`Smaller. Simpler.<br /><span class="text-muted-foreground">No compromises.</span>`}
+      subtext="viewmotion is built for the 90% of scroll animations landing pages actually need. Not a swiss-army knife — a precision tool."
+    />
+
+    <div
+      class="overflow-x-auto rounded-xl border"
+      {...motion({ preset: "fade-up", duration: 700 })}
+    >
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="border-b">
+            <th
+              class="text-left py-4 px-5 font-semibold text-muted-foreground w-1/4"
+              >Feature</th
+            >
+            <th
+              class="py-4 px-5 font-bold text-primary bg-primary/8 text-center"
+              >viewmotion</th
+            >
+            <th class="py-4 px-5 font-medium text-muted-foreground text-center"
+              >AOS.js</th
+            >
+            <th class="py-4 px-5 font-medium text-muted-foreground text-center"
+              >Animate.css</th
+            >
+            <th class="py-4 px-5 font-medium text-muted-foreground text-center"
+              >GSAP ST</th
+            >
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map(
+              ({ feature, viewmotion: vm, aos, animatecss, gsap, winner }) => (
+                <tr class="border-b last:border-0 hover:bg-accent transition-colors">
+                  <td class="py-3.5 px-5 text-foreground font-medium">
+                    {feature}
+                  </td>
+                  <td
+                    class={`py-3.5 px-5 text-center font-semibold bg-primary/5 ${winner ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}
+                  >
+                    {vm}
+                  </td>
+                  <td class="py-3.5 px-5 text-center text-muted-foreground">
+                    {aos}
+                  </td>
+                  <td class="py-3.5 px-5 text-center text-muted-foreground">
+                    {animatecss}
+                  </td>
+                  <td class="py-3.5 px-5 text-center text-muted-foreground">
+                    {gsap}
+                  </td>
+                </tr>
+              ),
+            )
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p
+      class="text-center text-muted-foreground text-xs mt-4"
+      {...motion({ preset: "fade", delay: 200 })}
+    >
+      Bundle sizes from Bundlephobia. GSAP ST = ScrollTrigger plugin.
+    </p>
+  </div>
+</section>

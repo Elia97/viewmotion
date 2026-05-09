@@ -1,0 +1,58 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: "motion() — API reference — viewmotion docs"
+description: API reference for the motion() helper function used in Astro and other SSR frameworks.
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# motion()
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion</p>
+
+Returns an object of HTML attributes (`data-motion` + `style`) that can be spread onto any
+element. Designed for Astro and SSR frameworks.
+
+## Signature
+
+```ts
+function motion(config: MotionConfig): Record<string, string>;
+```
+
+## Options
+
+| Property   | Type     | Default | Description                        |
+| ---------- | -------- | ------- | ---------------------------------- |
+| `preset`   | `string` | —       | Animation preset name (required)   |
+| `delay`    | `number` | `0`     | Delay before animation starts (ms) |
+| `duration` | `number` | `600`   | Animation duration (ms)            |
+
+## Return value
+
+Returns a plain object with the `data-motion` attribute ready to be spread:
+
+```js
+// Returns:
+{
+  "data-motion": '{"preset":"fade-up","delay":200}'
+}
+```
+
+## Usage in Astro
+
+```astro
+---
+import { motion } from "viewmotion";
+---
+
+<h1 {...motion({ preset: "fade-up", delay: 200 })}>Hello world</h1>
+<p {...motion({ preset: "fade-up", duration: 800 })}>Longer animation</p>
+```
+
+<NavLinks
+  prev={{ href: "/docs/api/init-motion", label: "initMotion()" }}
+  next={{ href: "/docs/api/stagger", label: "stagger()" }}
+/>

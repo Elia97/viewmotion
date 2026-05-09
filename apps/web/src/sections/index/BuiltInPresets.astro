@@ -1,0 +1,89 @@
+---
+import { motion, stagger } from "viewmotion";
+import SectionHeader from "../../components/SectionHeader.astro";
+
+const presets = [
+  {
+    preset: "fade",
+    label: "fade",
+    desc: "Pure opacity transition from 0 to 1.",
+    icon: "○",
+  },
+  {
+    preset: "fade-up",
+    label: "fade-up",
+    desc: "Opacity + translate up 24px.",
+    icon: "↑",
+  },
+  {
+    preset: "fade-down",
+    label: "fade-down",
+    desc: "Opacity + translate down 24px.",
+    icon: "↓",
+  },
+  {
+    preset: "slide-right",
+    label: "slide-right",
+    desc: "Enters from right 32px.",
+    icon: "←",
+  },
+  {
+    preset: "slide-left",
+    label: "slide-left",
+    desc: "Enters from left 32px.",
+    icon: "→",
+  },
+  {
+    preset: "scale-in",
+    label: "scale-in",
+    desc: "Scales up from 92% with fade.",
+    icon: "⊕",
+  },
+  {
+    preset: "zoom-out",
+    label: "zoom-out",
+    desc: "Shrinks from 108% with fade.",
+    icon: "⊖",
+  },
+  {
+    preset: "blur-in",
+    label: "blur-in",
+    desc: "Fades in with 6px blur dissolve.",
+    icon: "◉",
+  },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <SectionHeader
+      heading="8 built-in animations"
+      subtext={`Every preset is a composable CSS keyframe. Scroll to see each one in
+        action. Need a custom animation? Use <code class="text-primary">registerPreset()</code> to add your own.`}
+    />
+
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 gap-4"
+      {...stagger({ delay: 100, step: 150 })}
+    >
+      {
+        presets.map(({ preset, label, desc, icon }) => (
+          <div
+            class="group border rounded-lg bg-card transition-colors duration-300 hover:border-primary p-6 hover:border-primary"
+            {...motion({ preset, duration: 1000 })}
+          >
+            <div class="text-2xl mb-3 opacity-40 group-hover:opacity-80 transition-opacity">
+              {icon}
+            </div>
+            <div class="text-sm font-bold font-mono text-primary mb-2">
+              {label}
+            </div>
+            <p class="text-muted-foreground text-xs leading-relaxed mb-0">
+              {desc}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

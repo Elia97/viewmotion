@@ -1,0 +1,152 @@
+---
+import { motion, stagger } from "viewmotion";
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div>
+        <p
+          class="text-primary font-semibold text-sm tracking-widest uppercase mb-3"
+          {...motion({ preset: "fade", duration: 500 })}
+        >
+          Philosophy
+        </p>
+        <h2
+          class="text-3xl md:text-5xl font-bold tracking-tight mb-6"
+          {...motion({ preset: "fade-up", duration: 600 })}
+        >
+          Not a scroll engine.<br />
+          <span class="text-muted-foreground">A reveal system.</span>
+        </h2>
+        <div class="space-y-4" {...motion({ preset: "fade-up", delay: 150 })}>
+          <p class="text-muted-foreground leading-relaxed">
+            viewmotion doesn't try to be GSAP or Framer Motion. It deliberately
+            solves
+            <strong class="text-foreground">one problem</strong>: revealing
+            elements as they enter the viewport with performant, composable CSS
+            animations.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            There's no scroll-driven timeline. No spring physics. No animation
+            orchestration. Just battle-tested browser APIs assembled into a
+            clean, minimal package.
+          </p>
+          <p class="text-muted-foreground leading-relaxed mb-0">
+            The result is a library that ships under <strong
+              class="text-foreground">2 KB gzipped</strong
+            >, installs in seconds, and delivers the 90% of scroll animations
+            that landing pages actually need.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-4" {...stagger({ delay: 100, step: 200 })}>
+        <div
+          class="flex items-start gap-4 border rounded-xl p-5"
+          {...motion({ preset: "slide-left" })}
+        >
+          <div class="shrink-0 w-8 h-8 rounded-md bg-emerald-100 dark:bg-emerald-900/20 flex items-center justify-center flex items-center justify-center">
+            <svg
+              class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"></path></svg
+            >
+          </div>
+          <div>
+            <strong class="text-sm">Performant by default</strong>
+            <p class="text-muted-foreground text-xs mt-1 mb-0">
+              Animations use CSS transforms &amp; opacity &mdash;
+              GPU-composited, never blocking the main thread.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="flex items-start gap-4 border rounded-xl p-5"
+          {...motion({ preset: "slide-left" })}
+        >
+          <div class="shrink-0 w-8 h-8 rounded-md bg-emerald-100 dark:bg-emerald-900/20 flex items-center justify-center flex items-center justify-center">
+            <svg
+              class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"></path></svg
+            >
+          </div>
+          <div>
+            <strong class="text-sm">Accessible out of the box</strong>
+            <p class="text-muted-foreground text-xs mt-1 mb-0">
+              Respects <code class="text-xs">prefers-reduced-motion</code> automatically.
+              No user opt-out required.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="flex items-start gap-4 border rounded-xl p-5"
+          {...motion({ preset: "slide-left" })}
+        >
+          <div class="shrink-0 w-8 h-8 rounded-md bg-emerald-100 dark:bg-emerald-900/20 flex items-center justify-center flex items-center justify-center">
+            <svg
+              class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"></path></svg
+            >
+          </div>
+          <div>
+            <strong class="text-sm">Predictable &amp; debuggable</strong>
+            <p class="text-muted-foreground text-xs mt-1 mb-0">
+              Standard CSS classes &amp; data attributes. Inspect in DevTools
+              like any other element.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="flex items-start gap-4 border rounded-xl p-5"
+          {...motion({ preset: "slide-left" })}
+        >
+          <div class="shrink-0 w-8 h-8 rounded-md bg-emerald-100 dark:bg-emerald-900/20 flex items-center justify-center flex items-center justify-center">
+            <svg
+              class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"></path></svg
+            >
+          </div>
+          <div>
+            <strong class="text-sm">Tree-shakeable &amp; extensible</strong>
+            <p class="text-muted-foreground text-xs mt-1 mb-0">
+              Import only what you use. Add custom presets with <code
+                class="text-xs">registerPreset()</code
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

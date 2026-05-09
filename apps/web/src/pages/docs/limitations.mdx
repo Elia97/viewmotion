@@ -1,0 +1,79 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Limitations — viewmotion docs
+description: Known limitations and constraints of viewmotion. Understand what it does and does not support.
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Limitations
+
+viewmotion solves one problem well: revealing elements on scroll. Understanding its
+constraints helps you decide when it's the right tool and when it isn't.
+
+## CSS animations only
+
+viewmotion uses CSS `@keyframes` exclusively. It does **not** use the Web Animations API
+or any JavaScript animation loop. This means:
+
+- No physics-based motion (springs, inertia)
+- No per-frame JavaScript callbacks
+- No fine-grained animation control from JS
+
+All timing is controlled via CSS `duration` and `delay` values.
+
+## Viewport entry only
+
+Elements animate when they **enter** the viewport. viewmotion is not a scroll-progress
+engine. There is no:
+
+- Parallax
+- Progress-based effects (e.g., animate to 50% at half scroll)
+- Scroll-linked motion
+
+## No exit animations
+
+Elements reveal on entry. When an element leaves the viewport, the CSS class is removed
+instantly — there is no exit animation. For elements with `once: false`, re-entering the
+viewport replays the reveal animation from the start.
+
+## Single shared observer
+
+All animated elements share one `IntersectionObserver` created at `initMotion()` call
+time. This means:
+
+- All elements use the same `rootMargin` and `threshold`
+- Per-element observer configuration is not supported
+
+## No dynamic elements
+
+`initMotion()` collects all `[data-motion]` and `[data-stagger]` elements **once** at
+call time. Elements added to the DOM afterwards are not observed automatically. If you
+add elements dynamically, you must call `initMotion()` again.
+
+<Callout type="warning" title="SPA route changes">
+  In single-page applications, call `initMotion()` on each route change to pick
+  up new elements — and call `destroy()` first to avoid memory leaks from the
+  previous observer.
+</Callout>
+
+## API stability
+
+The API is **not yet stable**. This is a `0.x` release — breaking changes may occur
+before `1.0`. Pin your version if stability is important.
+
+The following are **not yet available** (planned roadmap items, not current features):
+
+- `destroy()` cleanup of observed elements (removing inline styles + classes)
+- Dynamic element registration without full re-initialization
+- Custom easing per-preset
+- Exit animation support
+- Scroll-progress-based animations
+
+<NavLinks
+  prev={{ href: "/docs/advanced/performance", label: "Performance" }}
+  next={{ href: "/docs", label: "Back to docs" }}
+/>

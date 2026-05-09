@@ -1,0 +1,56 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: "stagger() — API reference — viewmotion docs"
+description: API reference for the stagger() helper function for cascading child animations.
+---
+
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# stagger()
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion</p>
+
+Returns an object of HTML attributes (`data-stagger`) to apply on a container element.
+Direct children with `data-motion` will receive automatic incremental delays.
+
+## Signature
+
+```ts
+function stagger(options?: StaggerOptions): Record<string, string>;
+```
+
+## Options
+
+| Property | Type     | Default | Description                                              |
+| -------- | -------- | ------- | -------------------------------------------------------- |
+| `delay`  | `number` | `0`     | Initial delay before the first child animates (ms)       |
+| `step`   | `number` | `80`    | Delay increment added between each subsequent child (ms) |
+
+## Return value
+
+```js
+// Returns:
+{
+  "data-stagger": '{"delay":0,"step":80}'
+}
+```
+
+## Usage
+
+```astro
+---
+import { motion, stagger } from "viewmotion";
+---
+<ul {...stagger({ step: 80 })}>
+  <li {...motion({ preset: "fade-up" })}>Item 1</li>
+  <li {...motion({ preset: "fade-up" })}>Item 2</li>
+  <li {...motion({ preset: "fade-up" })}>Item 3</li>
+</ul>
+```
+
+<NavLinks
+  prev={{ href: "/docs/api/motion", label: "motion()" }}
+  next={{ href: "/docs/api/register-preset", label: "registerPreset()" }}
+/>

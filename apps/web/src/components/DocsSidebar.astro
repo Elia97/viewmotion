@@ -1,0 +1,122 @@
+---
+import { motion } from "viewmotion";
+
+interface Props {
+  currentPage?: string;
+}
+
+const { currentPage = "" } = Astro.props;
+
+type SidebarItem = {
+  label: string;
+  href: string;
+};
+
+type SidebarSection = {
+  title: string;
+  items: SidebarItem[];
+};
+
+const sections: SidebarSection[] = [
+  {
+    title: "Getting started",
+    items: [
+      { label: "Introduction", href: "/docs" },
+      { label: "Installation", href: "/docs/installation" },
+      { label: "Quick start", href: "/docs/quick-start" },
+    ],
+  },
+  {
+    title: "Core concepts",
+    items: [
+      { label: "How it works", href: "/docs/how-it-works" },
+      { label: "Presets", href: "/docs/presets" },
+      { label: "Custom animations", href: "/docs/custom-animations" },
+      { label: "Stagger", href: "/docs/stagger" },
+      { label: "Accessibility", href: "/docs/accessibility" },
+    ],
+  },
+  {
+    title: "API reference",
+    items: [
+      { label: "initMotion()", href: "/docs/api/init-motion" },
+      { label: "motion()", href: "/docs/api/motion" },
+      { label: "stagger()", href: "/docs/api/stagger" },
+      { label: "registerPreset()", href: "/docs/api/register-preset" },
+      { label: "Configuration", href: "/docs/api/configuration" },
+    ],
+  },
+  {
+    title: "Framework adapters",
+    items: [
+      { label: "React", href: "/docs/adapters/react" },
+      { label: "Vue", href: "/docs/adapters/vue" },
+      { label: "Svelte", href: "/docs/adapters/svelte" },
+      { label: "Astro", href: "/docs/adapters/astro" },
+    ],
+  },
+  {
+    title: "Advanced",
+    items: [
+      { label: "Smooth scroll (Lenis)", href: "/docs/advanced/smooth-scroll" },
+      { label: "SSR & hydration", href: "/docs/advanced/ssr" },
+      { label: "Performance", href: "/docs/advanced/performance" },
+      { label: "Limitations", href: "/docs/limitations" },
+    ],
+  },
+];
+
+function isActive(href: string): boolean {
+  if (href === "/docs") {
+    return currentPage === "/docs" || currentPage === "/docs/";
+  }
+  return currentPage.startsWith(href);
+}
+---
+
+<!-- Mobile overlay -->
+<div
+  id="sidebar-overlay"
+  class="fixed inset-0 bg-black/60 z-30 hidden sm:hidden"
+>
+</div>
+
+<!-- Sidebar -->
+<aside
+  id="docs-sidebar"
+  class="fixed sm:sticky top-14 left-0 z-40 w-64 h-[calc(100vh-4rem)] bg-background border-r border-border transition-transform duration-200 -translate-x-full sm:translate-x-0 shrink-0 flex flex-col"
+  {...motion({ preset: "blur-in", duration: 1000, once: true })}
+>
+  <!-- Inner scrollable container — separato dall'elemento sticky per evitare
+       il bug Chrome/Safari che blocca lo scroll col mouse su sticky+overflow -->
+  <div class="overflow-y-auto flex-1 sidebar-scroll" data-lenis-prevent>
+    <nav class="px-4 py-6 space-y-6">
+      {
+        sections.map((section) => (
+          <div>
+            <h4 class="font-mono text-[0.68rem] font-medium text-muted-foreground/70 uppercase tracking-[0.16em] mb-2.5 px-3">
+              {section.title}
+            </h4>
+            <ul class="space-y-0.5">
+              {section.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[
+                      "block px-3 py-1.5 rounded-lg text-sm no-underline transition-colors duration-150",
+                      isActive(item.href)
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-muted-foreground hover:text-foreground hover:bg-accent",
+                    ]}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+  </div>
+</aside>

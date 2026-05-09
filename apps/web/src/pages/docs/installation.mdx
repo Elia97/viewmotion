@@ -1,0 +1,71 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Installation — viewmotion docs
+description: Install viewmotion and framework adapters via npm, pnpm, or yarn.
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Installation
+
+Install the core library or one of the framework adapters with your preferred package manager.
+
+## Core library
+
+The core package works with any HTML page — no framework required.
+
+```bash
+# npm
+npm install viewmotion
+
+# pnpm
+pnpm add viewmotion
+
+# yarn
+yarn add viewmotion
+```
+
+## Framework adapters
+
+Each adapter depends on the core package, which is installed automatically as a peer dependency.
+
+```bash
+# React
+npm install viewmotion-react
+
+# Vue
+npm install viewmotion-vue
+
+# Svelte
+npm install viewmotion-svelte
+```
+
+## Smooth scroll (optional)
+
+viewmotion supports optional smooth scrolling via [Lenis](https://github.com/darkroomengineering/lenis).
+Install it as a peer dependency if you want buttery smooth scrolling:
+
+```bash
+npm install viewmotion lenis
+```
+
+<Callout type="warning" title="Lenis is an optional peer dependency">
+  If you pass `smoothScroll: true` to `initMotion()` without installing Lenis,
+  viewmotion logs a console warning and falls back to native scroll behaviour —
+  no error is thrown. Install `lenis` only if you intend to use smooth
+  scrolling.
+</Callout>
+
+## Requirements
+
+- Any modern browser with `IntersectionObserver` support
+- ES2020+ environment (or a bundler that transpiles)
+- No polyfills needed for Chrome 79+, Firefox 72+, Safari 14+, Edge 79+
+
+<NavLinks
+  prev={{ href: "/docs", label: "Introduction" }}
+  next={{ href: "/docs/quick-start", label: "Quick start" }}
+/>

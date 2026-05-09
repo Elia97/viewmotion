@@ -1,0 +1,60 @@
+---
+import { motion, stagger } from "viewmotion";
+import { Icon } from "astro-icon/components";
+import SectionHeader from "../../components/SectionHeader.astro";
+
+const cards = [
+  {
+    icon: "intersectionObserver",
+    title: "IntersectionObserver",
+    description:
+      "A single global observer monitors all animated elements. When they enter the viewport, a CSS class is applied that triggers the animation. One observer — any number of elements.",
+    preset: "slide-left",
+  },
+  {
+    icon: "cssKeyframe",
+    title: "CSS @keyframes",
+    description:
+      "Animations are pure CSS keyframes — hardware-accelerated by the browser. No JavaScript animation loop. No requestAnimationFrame. Just the platform doing what it does best.",
+    preset: "slide-left",
+  },
+  {
+    icon: "dependencies",
+    title: "Zero dependencies",
+    description:
+      "No GSAP. No Framer Motion. No scroll libraries. viewmotion ships under 2 KB gzipped and uses only native browser APIs. Smooth scroll is opt-in via Lenis.",
+    preset: "slide-left",
+  },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <SectionHeader
+      label="How it works"
+      heading="One observer. Pure CSS. Done."
+      subtext={`Viewmotion watches elements entering the viewport with a single global
+        <code class="text-primary">IntersectionObserver</code> and triggers <code
+          class="text-primary">CSS animations</code>. No scroll events. No polling. No runtime cost.`}
+    />
+
+    <div
+      class="grid md:grid-cols-3 gap-6"
+      {...stagger({ delay: 100, step: 200 })}
+    >
+      {
+        cards.map(({ icon, title, description, preset }) => (
+          <div class="border rounded-lg bg-card transition-colors duration-300 hover:border-primary p-6" {...motion({ preset })}>
+            <div class="size-12 bg-foreground text-background rounded-md flex items-center justify-center mb-5">
+              <Icon name={icon} class="size-6" />
+            </div>
+            <h3 class="text-lg font-semibold mb-2">{title}</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">
+              {description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

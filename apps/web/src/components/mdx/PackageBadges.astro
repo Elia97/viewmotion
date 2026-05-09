@@ -1,0 +1,46 @@
+---
+import { motion } from "viewmotion";
+
+/**
+ * Colored pill badges row (used on Introduction page).
+ * Usage:
+ *   <PackageBadges badges={[
+ *     { label: "Framework-agnostic", color: "indigo" },
+ *     { label: "SSR-safe", color: "emerald" },
+ *   ]} />
+ */
+interface Badge {
+  label: string;
+  color: "indigo" | "emerald" | "violet" | "amber" | "cyan" | "orange";
+}
+
+interface Props {
+  badges: Badge[];
+}
+
+const { badges } = Astro.props;
+
+const colorMap: Record<Badge["color"], string> = {
+  indigo: "bg-indigo-500/10 text-indigo-400",
+  emerald: "bg-emerald-500/10 text-emerald-400",
+  violet: "bg-violet-500/10 text-violet-400",
+  amber: "bg-amber-500/10 text-amber-400",
+  cyan: "bg-cyan-500/10 text-cyan-400",
+  orange: "bg-orange-500/10 text-orange-400",
+};
+---
+
+<div
+  class="border rounded-xl p-6 mb-8"
+  {...motion({ preset: "fade-up", duration: 500, once: true })}
+>
+  <div class="flex flex-wrap gap-3 text-sm">
+    {
+      badges.map((b) => (
+        <span class={`px-3 py-1 rounded-full ${colorMap[b.color]}`}>
+          {b.label}
+        </span>
+      ))
+    }
+  </div>
+</div>

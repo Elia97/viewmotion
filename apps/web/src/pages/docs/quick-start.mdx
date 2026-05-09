@@ -1,0 +1,121 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Quick start — viewmotion docs
+description: Get up and running with viewmotion in under a minute.
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Quick start
+
+Get your first scroll-reveal animation running in under a minute.
+
+## 1. Import styles and initialize
+
+Import the CSS file that contains the keyframes and the `initMotion()` function:
+
+```js
+import "viewmotion/styles.css";
+import { initMotion } from "viewmotion";
+
+await initMotion();
+```
+
+## 2. Add data attributes to elements
+
+Add a `data-motion` attribute with a JSON configuration object:
+
+```html
+<h1 data-motion='{"preset":"fade-up"}'>Hello world</h1>
+
+<p data-motion='{"preset":"fade-up","delay":200,"duration":600}'>
+  Animates with a 200ms delay
+</p>
+```
+
+## 3. That's it!
+
+Elements will animate automatically as they scroll into view. The observer runs once per element —
+after the animation triggers, the element is unobserved.
+
+<Callout type="tip">
+  In any environment that supports object spread on elements — JSX (React,
+  Solid, Preact), Astro templates, Vue JSX — you can use the `motion()` helper
+  to avoid hand-writing JSON strings:
+
+```jsx
+import { motion } from "viewmotion";
+
+<h1 {...motion({ preset: "fade-up" })}>Hello world</h1>;
+```
+
+Framework adapter packages like `viewmotion-react` or `viewmotion-vue` wrap
+this pattern with ergonomic hooks and directives. See the
+[framework adapters](/docs/adapters/react) docs.
+
+</Callout>
+
+## Full example
+
+Here's a complete HTML page using a bundler (Vite, Webpack, Parcel, etc.).
+With a bundler, import the CSS directly in your JS entry point — no `<link>` tag needed.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <h1 data-motion='{"preset":"fade-up"}'>Hello world</h1>
+
+    <div data-stagger='{"delay":100}'>
+      <div data-motion='{"preset":"fade-up"}'>Card 1</div>
+      <div data-motion='{"preset":"fade-up"}'>Card 2</div>
+      <div data-motion='{"preset":"fade-up"}'>Card 3</div>
+    </div>
+
+    <script type="module">
+      import "viewmotion/styles.css";
+      import { initMotion } from "viewmotion";
+      await initMotion();
+    </script>
+  </body>
+</html>
+```
+
+<Callout type="note" title="No bundler?">
+Use a CDN link instead and remove the `import "viewmotion/styles.css"` line from your script:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/viewmotion@0.1.1/dist/styles.css"
+/>
+```
+
+</Callout>
+
+## Common pitfalls
+
+<Callout type="danger" title="CSS not imported">
+  Animations won't work if `viewmotion/styles.css` is missing. It contains all
+  the `@keyframes` definitions. Always import it before calling `initMotion()`.
+</Callout>
+
+<Callout type="danger" title="initMotion() called before DOM is ready">
+Call `initMotion()` after the DOM has parsed. In a plain HTML page, place the `<script>` tag
+at the end of `<body>` or use a `DOMContentLoaded` listener. In frameworks, use the appropriate
+lifecycle hook — `useEffect` in React, `onMount` in Svelte, `onMounted` in Vue.
+</Callout>
+
+<Callout type="danger" title="registerPreset() called after initMotion()">
+  Custom presets must be registered *before* `initMotion()` runs. Calling
+  `registerPreset()` afterwards has no effect on elements already observed.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/installation", label: "Installation" }}
+  next={{ href: "/docs/how-it-works", label: "How it works" }}
+/>

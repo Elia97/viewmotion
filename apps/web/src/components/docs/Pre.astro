@@ -1,0 +1,10 @@
+---
+import { motion } from "viewmotion";
+---
+
+<div
+  {...motion({ preset: "fade-up", duration: 500, once: true })}
+  class="code-block-wrapper"
+>
+  <pre {...Astro.props}><slot /></pre>
+</div>

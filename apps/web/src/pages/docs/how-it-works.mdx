@@ -1,0 +1,78 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: How it works — viewmotion docs
+description: "Understand the architecture behind viewmotion: IntersectionObserver, CSS keyframes, and data attributes."
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import StepCard from "../../components/mdx/StepCard.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# How it works
+
+viewmotion is built on three pillars: a single IntersectionObserver, CSS `@keyframes`,
+and declarative data attributes.
+
+## Architecture overview
+
+<StepCard step="1" title="Initialization">
+  When you call `initMotion()`, viewmotion scans the DOM for all elements with
+  `data-motion` or `data-stagger` attributes. It creates a **single global
+  IntersectionObserver** that monitors them all.
+</StepCard>
+
+<StepCard step="2" title="Observation">
+  The observer watches each element. When an element enters the viewport (based
+  on the configured threshold), viewmotion reads the element's `data-motion`
+  configuration and applies the corresponding CSS animation class.
+</StepCard>
+
+<StepCard step="3" title="Animation">
+  The CSS class triggers a `@keyframes` animation — hardware-accelerated by the
+  browser using `transform` and `opacity`. Once the animation completes, the
+  element is unobserved to free resources.
+</StepCard>
+
+## Why IntersectionObserver?
+
+Unlike scroll event listeners, `IntersectionObserver` is asynchronous and runs off
+the main thread. This means:
+
+- **No scroll jank** — observations don't block rendering
+- **No debouncing needed** — the browser handles callback timing
+- **One observer for all elements** — scales to hundreds of elements with no performance penalty
+
+## Why CSS @keyframes?
+
+CSS animations are composited by the GPU, keeping the main thread free. viewmotion only animates
+`transform`, `opacity`, and `filter` — properties that don't trigger layout or paint.
+
+<Callout type="note">
+  viewmotion does not use `requestAnimationFrame` or any JavaScript animation
+  loop. Once the CSS class is applied, the browser handles everything.
+</Callout>
+
+## Data attribute flow
+
+The data flow is simple and predictable:
+
+```html
+<!-- Before entering viewport: -->
+<h1 data-motion='{"preset":"fade-up"}' style="opacity:0">Hello</h1>
+
+<!-- After entering viewport: -->
+<h1
+  data-motion='{"preset":"fade-up"}'
+  class="vm-revealed"
+  style="animation: vm-fade-up 600ms ease both"
+>
+  Hello
+</h1>
+```
+
+<NavLinks
+  prev={{ href: "/docs/quick-start", label: "Quick start" }}
+  next={{ href: "/docs/presets", label: "Presets" }}
+/>

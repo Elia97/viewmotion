@@ -1,0 +1,67 @@
+---
+import { motion, stagger } from "viewmotion";
+import { Icon } from "astro-icon/components";
+import SectionHeader from "../../components/SectionHeader.astro";
+import InstallSnippet from "../../components/InstallSnippet.astro";
+
+const cards = [
+  {
+    icon: "javascript",
+    title: "Vanilla / Core",
+    description: "Framework-agnostic. Works with any HTML.",
+    package: "viewmotion",
+  },
+  {
+    icon: "react",
+    title: "React",
+    description: "<code>useMotion</code> hook for refs.",
+    package: "viewmotion-react",
+  },
+  {
+    icon: "vue",
+    title: "Vue",
+    description: "<code>v-motion</code> directive + composable.",
+    package: "viewmotion-vue",
+  },
+  {
+    icon: "svelte",
+    title: "Svelte",
+    description: "<code>use:motion</code> action.",
+    package: "viewmotion-svelte",
+  },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <SectionHeader
+      label="Framework adapters"
+      heading="Works with your stack"
+      subtext="The core library is framework-agnostic. Official adapters bring idiomatic APIs to React, Vue, Svelte, and Astro."
+    />
+
+    <div
+      class="grid sm:grid-cols-2 gap-8"
+      {...stagger({ delay: 100, step: 200 })}
+    >
+      {
+        cards.map(({ icon, title, description, package: pkg }) => (
+          <div
+            class="border rounded-lg bg-card transition-colors duration-300 hover:border-primary p-6 flex flex-col min-w-0"
+            {...motion({ preset: "fade-up", duration: 800 })}
+          >
+            <div class="text-3xl mb-4 text-secondary">
+              <Icon name={icon} />
+            </div>
+            <h3 class="text-lg font-semibold mb-2">{title}</h3>
+            <p
+              class="text-muted-foreground text-sm leading-relaxed mb-4"
+              set:html={description}
+            />
+            <InstallSnippet pkg={pkg} class="mt-auto text-xs" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

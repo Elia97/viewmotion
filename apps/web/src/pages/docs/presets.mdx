@@ -1,0 +1,51 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Presets — viewmotion docs
+description: "All 8 built-in animation presets: fade, fade-up, fade-down, slide-left, slide-right, scale-in, zoom-out, blur-in."
+---
+
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Presets
+
+viewmotion ships with 8 built-in presets. Each preset is a composable CSS `@keyframes` animation.
+
+## Built-in presets
+
+| Name          | Effect                     | Properties animated  |
+| ------------- | -------------------------- | -------------------- |
+| `fade`        | Opacity 0 → 1              | `opacity`            |
+| `fade-up`     | Fade + translate up 24px   | `opacity, transform` |
+| `fade-down`   | Fade + translate down 24px | `opacity, transform` |
+| `slide-left`  | Translate from left 32px   | `opacity, transform` |
+| `slide-right` | Translate from right 32px  | `opacity, transform` |
+| `scale-in`    | Fade + scale from 92%      | `opacity, transform` |
+| `zoom-out`    | Fade + scale from 108%     | `opacity, transform` |
+| `blur-in`     | Fade + blur from 6px       | `opacity, filter`    |
+
+## Usage
+
+Specify a preset via the `preset` property in the `data-motion` attribute:
+
+```html
+<div data-motion='{"preset":"fade-up"}'>...</div>
+<div data-motion='{"preset":"scale-in","delay":200}'>...</div>
+<div data-motion='{"preset":"blur-in","duration":800}'>...</div>
+```
+
+## Customizing preset parameters
+
+Each preset accepts optional `delay` and `duration` overrides:
+
+| Parameter  | Type     | Default | Description                        |
+| ---------- | -------- | ------- | ---------------------------------- |
+| `preset`   | `string` | —       | The animation preset name          |
+| `delay`    | `number` | `0`     | Delay before animation starts (ms) |
+| `duration` | `number` | `600`   | Animation duration (ms)            |
+
+<NavLinks
+  prev={{ href: "/docs/how-it-works", label: "How it works" }}
+  next={{ href: "/docs/custom-animations", label: "Custom animations" }}
+/>

@@ -1,0 +1,75 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Introduction — viewmotion docs
+description: Minimal reveal animation system for landing pages. Framework-agnostic, SSR-safe, zero runtime dependencies.
+---
+
+import PackageBadges from "../../components/mdx/PackageBadges.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Introduction
+
+viewmotion is a minimal reveal animation system for landing pages. It uses a single
+`IntersectionObserver` and CSS `@keyframes` to animate elements as they enter the viewport.
+
+<PackageBadges
+  badges={[
+    { label: "Framework-agnostic", color: "indigo" },
+    { label: "SSR-safe", color: "emerald" },
+    { label: "Zero dependencies", color: "violet" },
+    { label: "< 2 KB gzipped", color: "amber" },
+  ]}
+/>
+
+## What it is
+
+viewmotion observes elements entering the viewport and applies a CSS class that triggers a smooth
+animation. It solves one problem well: **revealing elements on scroll** with performant,
+composable CSS animations.
+
+This is **not** a scroll-driven animation engine. There's no timeline, no spring physics, no
+animation orchestration. Just battle-tested browser APIs assembled into a clean, minimal package.
+
+## Packages
+
+The ecosystem is organized as a monorepo with a core library and framework-specific adapters:
+
+| Package             | Description                                                 | Version |
+| ------------------- | ----------------------------------------------------------- | ------- |
+| `viewmotion`        | Core library — framework-agnostic                           | `0.1.1` |
+| `viewmotion-react`  | React adapter — `useMotion` hook                            | `0.1.1` |
+| `viewmotion-vue`    | Vue adapter — `v-motion` directive + `useMotion` composable | `0.1.1` |
+| `viewmotion-svelte` | Svelte adapter — `use:motion` action                        | `0.1.1` |
+
+## Key features
+
+- **Single IntersectionObserver** — one global observer for all animated elements
+- **8 built-in presets** — from subtle fades to directional slides and blurs
+- **Stagger support** — cascade child animations with automatic delay offsets
+- **Accessibility** — respects `prefers-reduced-motion` out of the box
+- **Smooth scroll** — optional Lenis integration as a peer dependency
+- **Extensible** — register custom presets with `registerPreset()`
+
+## Where to start
+
+| Goal                               | Path                                                                        |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| Animate something in 5 minutes     | [Quick start](/docs/quick-start) → [Presets](/docs/presets)                 |
+| Understand how it works            | [How it works](/docs/how-it-works) → [API reference](/docs/api/init-motion) |
+| Using React / Vue / Svelte / Astro | [Framework adapters](/docs/adapters/react)                                  |
+
+## Compared to alternatives
+
+| Library            | Size (gzip) | Scroll reveal    | SSR-safe   | No JS runtime | Framework-specific    |
+| ------------------ | ----------- | ---------------- | ---------- | ------------- | --------------------- |
+| **viewmotion**     | ~2 KB       | ✅ built-in      | ✅         | ✅ CSS only   | ✅ adapters available |
+| AOS                | ~14 KB      | ✅ core use-case | ⚠️ partial | ❌            | ❌                    |
+| GSAP ScrollTrigger | ~100 KB     | ✅ powerful      | ❌         | ❌            | ❌                    |
+| Framer Motion      | ~45 KB      | ✅ variants      | ✅         | ❌            | ✅ React only         |
+| Motion One         | ~18 KB      | ✅               | ✅         | ❌            | ❌                    |
+
+**Choose viewmotion if**: you want scroll-reveal animations that ship zero runtime overhead, work everywhere, and won't bloat your bundle. It's not for complex timelines or physics-based animations.
+
+<NavLinks next={{ href: "/docs/installation", label: "Installation" }} />

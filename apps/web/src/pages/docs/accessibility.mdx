@@ -1,0 +1,58 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Accessibility — viewmotion docs
+description: How viewmotion respects prefers-reduced-motion and ensures accessible scroll animations.
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Accessibility
+
+viewmotion respects user accessibility preferences out of the box. No configuration needed.
+
+## prefers-reduced-motion
+
+When the user has `prefers-reduced-motion: reduce` enabled in their OS settings, viewmotion
+automatically skips all animations. Elements are revealed instantly without any motion.
+
+```css
+/* viewmotion includes this internally — you don't need to add it */
+@media (prefers-reduced-motion: reduce) {
+  [data-motion] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+```
+
+This means:
+
+- **No `IntersectionObserver` is created** — the animation system is skipped entirely
+- Content is always visible — never hidden behind unplayed animations
+- Users with vestibular disorders won't experience unwanted motion
+- No manual configuration required — it works automatically
+- WCAG 2.1 compliant (Success Criterion 2.3.3)
+
+## Best practices
+
+**Do:** Use animations to enhance content discovery, not to gate it. All content should be
+accessible even if animations never play.
+
+**Don't:** Don't rely on animations for critical information or navigation cues. Animations
+should be decorative, not functional.
+
+<Callout type="tip">
+  Test your page with `prefers-reduced-motion: reduce` enabled in Chrome
+  DevTools (Rendering tab → Emulate CSS media feature) to verify all content is
+  visible.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/stagger", label: "Stagger" }}
+  next={{ href: "/docs/api/init-motion", label: "API: initMotion()" }}
+/>

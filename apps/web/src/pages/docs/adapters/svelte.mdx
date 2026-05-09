@@ -1,0 +1,75 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Svelte adapter — viewmotion docs
+description: Use viewmotion in Svelte with the use:motion action from viewmotion-svelte.
+---
+
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Svelte
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion-svelte</p>
+
+The Svelte adapter provides a `use:motion` action that integrates seamlessly with Svelte's
+action system for declarative scroll-reveal animations.
+
+## Installation
+
+```bash
+npm install viewmotion-svelte
+```
+
+## use:motion action
+
+Apply animations using Svelte's `use:` directive:
+
+```svelte
+<script>
+  import { motion } from "viewmotion-svelte";
+</script>
+
+<h1 use:motion={{ preset: "fade-up" }}>Hello</h1>
+```
+
+## Action parameters
+
+| Property   | Type     | Description                 |
+| ---------- | -------- | --------------------------- |
+| `preset`   | `string` | Animation preset name       |
+| `delay`    | `number` | Delay before animation (ms) |
+| `duration` | `number` | Animation duration (ms)     |
+
+## Full example
+
+```svelte
+<script>
+  import { motion } from "viewmotion-svelte";
+  const items = ["Feature A", "Feature B", "Feature C"];
+</script>
+
+<section>
+  <h2 use:motion={{ preset: "fade-up" }}>Features</h2>
+
+  {#each items as item, i}
+    <div use:motion={{ preset: "fade-up", delay: i * 80 }}>
+      {item}
+    </div>
+  {/each}
+</section>
+```
+
+## How it works
+
+Under the hood, the `use:motion` action calls `motion()` from the core viewmotion package
+when the element is mounted. It automatically sets `data-motion` attributes and initializes
+the IntersectionObserver.
+
+When the component is destroyed, the action cleans up the observer automatically — no
+manual teardown is required.
+
+<NavLinks
+  prev={{ href: "/docs/adapters/vue", label: "Vue adapter" }}
+  next={{ href: "/docs/adapters/astro", label: "Astro adapter" }}
+/>

@@ -1,0 +1,149 @@
+---
+import BaseLayout from "./BaseLayout.astro"
+import SiteHeader from "../components/SiteHeader.astro"
+import SiteFooter from "@/components/SiteFooter.astro"
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+---
+
+<BaseLayout {title} {description}>
+  <SiteHeader variant="landing" />
+
+  <!-- Mobile navigation menu -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-x-0 top-16 z-40 hidden flex-col gap-1 border-b bg-background/95 p-6 backdrop-blur-xl sm:hidden"
+  >
+    <a
+      href="/docs"
+      class="flex items-center rounded-lg px-3 py-3 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
+      >Docs</a
+    >
+    <a
+      href="https://www.npmjs.com/package/viewmotion"
+      target="_blank"
+      rel="noopener"
+      class="flex items-center rounded-lg px-3 py-3 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
+      >npm</a
+    >
+    <a
+      href="https://github.com/Elia97/viewmotion"
+      target="_blank"
+      rel="noopener"
+      class="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-muted-foreground no-underline transition-colors hover:bg-accent hover:text-foreground"
+    >
+      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"
+        ><path
+          d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+        ></path></svg
+      >
+      GitHub
+    </a>
+  </div>
+
+  <main>
+    <slot />
+  </main>
+
+  <SiteFooter />
+
+  <script>
+    import { initMotion } from "viewmotion"
+
+    document.addEventListener("astro:page-load", async () => {
+      // Re-enable smooth scroll after scroll restoration is complete
+      requestAnimationFrame(() => {
+        document.documentElement.style.scrollBehavior = ""
+      })
+
+      try {
+        await initMotion({
+          smoothScroll: true,
+          scroll: {
+            lerp: 0.05,
+            wheelMultiplier: 1.5,
+          },
+        })
+      } catch (err) {
+        console.error(
+          "[viewmotion] initMotion failed, retrying without smooth scroll:",
+          err
+        )
+        // Lenis (smooth scroll) may fail in some browsers — retry without it.
+        // This still normalizes data-motion attrs and runs IntersectionObserver.
+        try {
+          await initMotion()
+        } catch {
+          // If even that fails, manually reveal all elements as last resort
+          document
+            .querySelectorAll<HTMLElement>("[data-motion]")
+            .forEach((el) => el.classList.add("motion-in"))
+        }
+      }
+
+      // ── Mobile nav toggle ──────────────────────────────────────────
+      const menuBtn = document.getElementById("mobile-menu-btn")
+      const mobileMenu = document.getElementById("mobile-menu")
+      const hamburgerIcon = document.getElementById("hamburger-icon")
+      const closeIcon = document.getElementById("close-icon")
+
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener("click", () => {
+          const isOpen = !mobileMenu.classList.contains("hidden")
+          mobileMenu.classList.toggle("hidden", isOpen)
+          mobileMenu.classList.toggle("flex", !isOpen)
+          menuBtn.setAttribute("aria-expanded", String(!isOpen))
+          hamburgerIcon?.classList.toggle("hidden", !isOpen)
+          closeIcon?.classList.toggle("hidden", isOpen)
+        })
+
+        // Close menu when a link inside it is clicked
+        mobileMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            mobileMenu.classList.add("hidden")
+            mobileMenu.classList.remove("flex")
+            menuBtn.setAttribute("aria-expanded", "false")
+            hamburgerIcon?.classList.remove("hidden")
+            closeIcon?.classList.add("hidden")
+          })
+        })
+      }
+
+      // ── Copy button handler ────────────────────────────────────────
+      const COPY_ICON = `<rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />`
+      const CHECK_ICON = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />`
+
+      document
+        .querySelectorAll<HTMLButtonElement>("[data-copy]")
+        .forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const text = btn.getAttribute("data-copy")
+            if (!text) return
+            await navigator.clipboard.writeText(text)
+
+            const label = btn.querySelector<HTMLElement>("[data-copy-label]")
+            const icon = btn.querySelector<SVGElement>("[data-copy-icon]")
+
+            if (label) {
+              const orig = label.textContent
+              label.textContent = "Copied!"
+              setTimeout(() => {
+                label.textContent = orig
+              }, 1500)
+            }
+            if (icon) {
+              icon.innerHTML = CHECK_ICON
+              setTimeout(() => {
+                icon.innerHTML = COPY_ICON
+              }, 1500)
+            }
+          })
+        })
+    })
+  </script>
+</BaseLayout>

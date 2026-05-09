@@ -1,0 +1,100 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Performance — viewmotion docs
+description: Best practices for optimal performance with viewmotion animations.
+---
+
+import StepCard from "../../../components/mdx/StepCard.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Performance
+
+viewmotion is designed for performance from the ground up. Here are the architectural
+decisions that make it fast, and best practices to keep your pages smooth.
+
+## Why viewmotion is fast
+
+<StepCard title="IntersectionObserver, not scroll listeners">
+  viewmotion uses the IntersectionObserver API — a browser-native mechanism that
+  runs off the main thread. Unlike scroll event listeners, it does not cause
+  layout thrashing or jank.
+</StepCard>
+
+<StepCard title="CSS keyframe animations">
+  All animations run via CSS `@keyframes`, which are composited by the browser's
+  GPU when possible. This means animations run at 60fps+ without JavaScript
+  frame-by-frame updates.
+</StepCard>
+
+<StepCard title="Tiny bundle size">
+  The core package is ~2 KB gzipped. No dependencies, no heavy runtime — just
+  attribute parsing + one observer instance.
+</StepCard>
+
+<StepCard title="Single observer pattern">
+  viewmotion creates one IntersectionObserver for all animated elements, rather
+  than one per element. This reduces memory usage and callback overhead.
+</StepCard>
+
+## Best practices
+
+### 1. Animate transforms and opacity
+
+All built-in presets use only `transform` and `opacity`. When creating custom presets,
+stick to these GPU-composited properties:
+
+| Recommended              | Avoid                    |
+| ------------------------ | ------------------------ |
+| `opacity`                | `width` / `height`       |
+| `transform: translate()` | `top` / `left`           |
+| `transform: scale()`     | `margin` / `padding`     |
+| `transform: rotate()`    | `box-shadow` (expensive) |
+
+### 2. Limit animated elements per page
+
+While viewmotion handles many elements efficiently, as a guideline:
+
+- **< 50 elements** — no concerns, runs smoothly
+- **50–100 elements** — fine on modern devices
+- **100+ elements** — consider lazy loading or paginating
+
+### 3. Use reasonable stagger delays
+
+Keep stagger increments between **50–120ms**. Very short values (< 30ms) make animations
+indistinguishable; very long values (> 200ms) slow down perceived page load.
+
+```js
+// Good: 80ms between each element
+stagger({ step: 80 });
+
+// Avoid: too fast, elements appear at once
+stagger({ step: 10 });
+```
+
+### 4. Avoid animating above the fold unnecessarily
+
+Elements visible on first paint don't benefit much from scroll-reveal. Consider using
+a simple CSS fade-in for hero content instead of scroll-triggered animations.
+
+## Measuring performance
+
+Use Chrome DevTools' Performance panel to check for:
+
+- **Layout shifts** — should be zero if using `transform`/`opacity` only
+- **Paint events** — should be minimal during animations
+- **Long tasks** — `initMotion()` should complete in < 1ms
+- **FPS** — should stay at 60fps during animation playback
+
+---
+
+**Found a performance issue?**
+If you're seeing unexpected jank or overhead, open an issue on
+[GitHub](https://github.com/Elia97/viewmotion/issues) with a minimal reproduction.
+Performance regressions are treated as bugs.
+
+<NavLinks
+  prev={{ href: "/docs/advanced/ssr", label: "SSR & Hydration" }}
+  next={{ href: "/docs/limitations", label: "Limitations" }}
+/>

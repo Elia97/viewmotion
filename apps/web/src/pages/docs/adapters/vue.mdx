@@ -1,0 +1,88 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Vue adapter — viewmotion docs
+description: Use viewmotion in Vue with the v-motion directive and useMotion composable from viewmotion-vue.
+---
+
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Vue
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion-vue</p>
+
+The Vue adapter offers a `v-motion` directive for template-based usage and a `useMotion`
+composable for programmatic control.
+
+## Installation
+
+```bash
+npm install viewmotion-vue
+```
+
+## Plugin setup
+
+Register the plugin in your Vue app entry point:
+
+```js
+import { createApp } from "vue";
+import { MotionPlugin } from "viewmotion-vue";
+import App from "./App.vue";
+
+createApp(App).use(MotionPlugin).mount("#app");
+```
+
+## v-motion directive
+
+Use the directive directly in templates:
+
+```html
+<template>
+  <h1 v-motion="'fade-up'">Hello</h1>
+
+  <!-- With options -->
+  <div v-motion="{ preset: 'slide-left', delay: 200 }">Content</div>
+</template>
+```
+
+| Value type | Example                                        |
+| ---------- | ---------------------------------------------- |
+| `string`   | `v-motion="'fade-up'"`                         |
+| `object`   | `v-motion="{ preset: 'fade-up', delay: 100 }"` |
+
+## useMotion composable
+
+For programmatic control, use the composable in `<script setup>`:
+
+```vue
+<script setup>
+import { useMotion } from "viewmotion-vue";
+const el = useMotion({ preset: "fade-up", delay: 300 });
+</script>
+
+<template>
+  <div ref="el">Animated</div>
+</template>
+```
+
+## Stagger in Vue
+
+Use `v-for` with dynamic delay to create stagger effects:
+
+```html
+<template>
+  <div
+    v-for="(item, i) in items"
+    :key="item.id"
+    v-motion="{ preset: 'fade-up', delay: i * 80 }"
+  >
+    {{ item.name }}
+  </div>
+</template>
+```
+
+<NavLinks
+  prev={{ href: "/docs/adapters/react", label: "React adapter" }}
+  next={{ href: "/docs/adapters/svelte", label: "Svelte adapter" }}
+/>

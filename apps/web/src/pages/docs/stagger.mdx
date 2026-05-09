@@ -1,0 +1,62 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Stagger — viewmotion docs
+description: Cascade children animations with automatic incremental delays using stagger().
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Stagger
+
+Animate lists, grids, and card groups with cascading delays. Add a `data-stagger` attribute to a
+container and each child with `data-motion` gets an automatic incremental delay.
+
+## Basic usage
+
+```html
+<div data-stagger='{"delay":100,"step":80}'>
+  <div data-motion='{"preset":"fade-up"}'>Card 1</div>
+  <!-- effective delay: 100ms (base delay) -->
+  <div data-motion='{"preset":"fade-up"}'>Card 2</div>
+  <!-- effective delay: 180ms (100 + 1 × 80) -->
+  <div data-motion='{"preset":"fade-up"}'>Card 3</div>
+  <!-- effective delay: 260ms (100 + 2 × 80) -->
+</div>
+```
+
+## How it works
+
+1. Collects all direct children with `data-motion`
+2. Assigns each child an incremental delay: `delay + (index × step)`
+3. Adds the calculated delay to any existing `delay` on the child
+
+## Stagger options
+
+| Parameter | Type     | Default | Description                                     |
+| --------- | -------- | ------- | ----------------------------------------------- |
+| `delay`   | `number` | `0`     | Base delay before the first child animates (ms) |
+| `step`    | `number` | `80`    | Extra delay added per child (ms)                |
+
+## Using the helper
+
+The `stagger()` helper generates the `data-stagger` attribute for you. It works in any
+environment that supports object spread on elements — JSX (React, Solid, Preact),
+Astro templates, Vue JSX:
+
+```jsx
+import { motion, stagger } from "viewmotion";
+
+<div {...stagger({ delay: 80 })}>
+  <div {...motion({ preset: "fade-up" })}>A</div>
+  <div {...motion({ preset: "fade-up" })}>B</div>
+  <div {...motion({ preset: "fade-up" })}>C</div>
+</div>;
+```
+
+<NavLinks
+  prev={{ href: "/docs/custom-animations", label: "Custom animations" }}
+  next={{ href: "/docs/accessibility", label: "Accessibility" }}
+/>

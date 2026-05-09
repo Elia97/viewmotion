@@ -1,0 +1,308 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import DocsSidebar from "../components/DocsSidebar.astro";
+import { motion } from "viewmotion";
+import SiteFooter from "@/components/SiteFooter.astro";
+import "../styles/docs.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Current page path for sidebar active state */
+  currentPage?: string;
+  /** MDX frontmatter (passed automatically when using layout: in .mdx files) */
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    currentPage?: string;
+  };
+}
+
+// Support both direct .astro props and MDX layout frontmatter
+const fm = Astro.props.frontmatter ?? {};
+const {
+  title = fm.title ?? "Docs — viewmotion",
+  description = fm.description ??
+    "Full documentation for viewmotion: installation, API reference, presets, adapters, and more.",
+  currentPage = fm.currentPage ?? Astro.url.pathname,
+} = Astro.props;
+
+// Breadcrumbs
+function slugToLabel(seg: string): string {
+  const labels: Record<string, string> = {
+    docs: "Docs",
+    api: "API",
+    adapters: "Adapters",
+    advanced: "Advanced",
+    "init-motion": "initMotion()",
+    "quick-start": "Quick start",
+    "how-it-works": "How it works",
+    "custom-animations": "Custom animations",
+    accessibility: "Accessibility",
+    presets: "Presets",
+    stagger: "Stagger",
+    installation: "Installation",
+    configuration: "Configuration",
+    motion: "motion()",
+    "register-preset": "registerPreset()",
+    react: "React",
+    vue: "Vue",
+    svelte: "Svelte",
+    astro: "Astro",
+    "smooth-scroll": "Smooth scroll",
+    ssr: "SSR & hydration",
+    performance: "Performance",
+  };
+  return (
+    labels[seg] ??
+    seg
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
+  );
+}
+
+const normPath = currentPage.replace(/\/$/, "") || "/docs";
+const pathSegments = normPath.split("/").filter(Boolean);
+const breadcrumbs = pathSegments.map((seg, i) => ({
+  label: slugToLabel(seg),
+  href: "/" + pathSegments.slice(0, i + 1).join("/"),
+  isLast: i === pathSegments.length - 1,
+}));
+
+const editBase =
+  "https://github.com/Elia97/viewmotion-website/blob/main/src/pages";
+const editRelPath =
+  normPath === "/docs" ? "/docs/index.mdx" : `${normPath}.mdx`;
+const editUrl = editBase + editRelPath;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`https://viewmotion.vercel.app${normPath}`}
+>
+  <SiteHeader variant="docs" />
+  <div class="flex min-h-[calc(100vh-4rem)]">
+    <!-- Sidebar -->
+    <DocsSidebar currentPage={currentPage} />
+
+    <!-- Main content column -->
+    <div class="flex-1 w-full min-w-0 flex flex-col">
+      <!-- Breadcrumbs -->
+      <nav
+        class="px-6 sm:px-8 py-3 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted-foreground flex items-center gap-2.5 border-b border-border overflow-x-auto shrink-0"
+        aria-label="Breadcrumb"
+        {...motion({ preset: "fade-down", duration: 1000, once: true })}
+      >
+        <a
+          href="/"
+          class="hover:text-foreground transition-colors whitespace-nowrap"
+          >Home</a
+        >
+        {
+          breadcrumbs.map((crumb) => (
+            <Fragment>
+              <span class="text-border select-none" aria-hidden="true">·</span>
+              {crumb.isLast ? (
+                <span class="text-foreground whitespace-nowrap">
+                  {crumb.label}
+                </span>
+              ) : (
+                <a
+                  href={crumb.href}
+                  class="hover:text-foreground transition-colors whitespace-nowrap"
+                >
+                  {crumb.label}
+                </a>
+              )}
+            </Fragment>
+          ))
+        }
+      </nav>
+
+      <!-- Article + right TOC -->
+      <div class="flex flex-1 min-w-0">
+        <article
+          class="docs-content flex-1 min-w-0 px-6 sm:px-8 py-12 sm:py-16"
+        >
+          <div class="max-w-3xl mx-auto">
+            <slot />
+
+            <!-- Edit this page -->
+            <div id="edit-link" class="mt-12 pt-6 border-t border-border">
+              <a
+                href={editUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm text-muted-foreground/50 hover:text-muted-foreground transition-colors no-underline"
+              >
+                <svg
+                  class="w-4 h-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125"
+                  ></path>
+                </svg>
+                Edit this page on GitHub
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- On this page TOC — xl+ only -->
+        <aside
+          class="hidden xl:block w-56 shrink-0 py-12 pr-6"
+          {...motion({ preset: "blur-in", duration: 1000, once: true })}
+        >
+          <div class="sticky top-24">
+            <p
+              class="font-mono text-[0.68rem] font-medium text-muted-foreground/70 uppercase tracking-[0.16em] mb-4 pl-3"
+            >
+              On this page
+            </p>
+            <nav
+              id="toc-nav"
+              class="border-l-2 border-border"
+              aria-label="On this page"
+            >
+            </nav>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <SiteFooter />
+
+  <script>
+    import { initMotion } from "viewmotion";
+
+    // Module-level reference so we can disconnect the previous observer
+    // before creating a new one on each SPA navigation.
+    let tocObserver: IntersectionObserver | null = null;
+
+    document.addEventListener("astro:before-swap", () => {
+      tocObserver?.disconnect();
+      tocObserver = null;
+    });
+
+    document.addEventListener("astro:page-load", async () => {
+      // ── 1. Copy-to-clipboard for code blocks ────────────────────
+      // The wrapper (.code-block-wrapper) and data-motion attributes are
+      // server-rendered by src/components/docs/Pre.astro — we only add
+      // the copy button here at runtime.
+      document
+        .querySelectorAll(".docs-content .code-block-wrapper")
+        .forEach((wrapper) => {
+          if (wrapper.querySelector(".copy-btn")) return;
+          const block = wrapper.querySelector(
+            ".astro-code",
+          ) as HTMLElement | null;
+          if (!block) return;
+
+          const btn = document.createElement("button");
+          btn.className = "copy-btn";
+          btn.setAttribute("aria-label", "Copy code");
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+          wrapper.appendChild(btn);
+
+          btn.addEventListener("click", async () => {
+            const code = block.innerText ?? "";
+            await navigator.clipboard.writeText(code);
+            btn.classList.add("copied");
+            btn.setAttribute("aria-label", "Copied!");
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.setAttribute("aria-label", "Copy code");
+              btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+            }, 2000);
+          });
+        });
+
+      // ── 2. Init viewmotion ────────────────────────────────────────
+      // All animations (h1/h2/h3/p/blockquote/pre/tbody/tr/ul/li) are
+      // server-rendered via src/components/docs/ Astro component overrides.
+      try {
+        await initMotion({ smoothScroll: true });
+      } catch {
+        // Lenis (smooth scroll) may fail in some environments — reveal all
+        // animated elements immediately as a fallback so nothing stays hidden.
+        try {
+          await initMotion();
+        } catch {
+          document
+            .querySelectorAll<HTMLElement>("[data-motion]")
+            .forEach((el) => el.classList.add("motion-in"));
+        }
+      }
+
+      // ── 4. Mobile sidebar toggle ──────────────────────────────────
+      const toggle = document.getElementById("mobile-sidebar-toggle");
+      const sidebar = document.getElementById("docs-sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+
+      toggle?.addEventListener("click", () => {
+        sidebar?.classList.toggle("-translate-x-full");
+        overlay?.classList.toggle("hidden");
+      });
+
+      overlay?.addEventListener("click", () => {
+        sidebar?.classList.add("-translate-x-full");
+        overlay?.classList.add("hidden");
+      });
+
+      // ── 5. Build "On this page" TOC from h2/h3 headings ──────────
+      const tocNav = document.getElementById("toc-nav");
+      if (tocNav) {
+        tocNav.innerHTML = "";
+        const headings = document.querySelectorAll<HTMLHeadingElement>(
+          ".docs-content h2, .docs-content h3",
+        );
+        if (headings.length > 1) {
+          headings.forEach((h) => {
+            if (!h.id) return;
+            const a = document.createElement("a");
+            a.href = "#" + h.id;
+            a.textContent = h.textContent ?? "";
+            a.className =
+              h.tagName === "H3"
+                ? "toc-link toc-h3 block pl-6 py-1 text-sm transition-all duration-150 no-underline leading-snug"
+                : "toc-link block pl-3 py-1 text-sm transition-all duration-150 no-underline leading-snug";
+            tocNav.appendChild(a);
+          });
+
+          // Highlight active heading on scroll
+          tocObserver = new IntersectionObserver(
+            (entries) => {
+              const visible = entries
+                .filter((e) => e.isIntersecting)
+                .sort(
+                  (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+                );
+              if (visible.length > 0) {
+                const id = visible[0].target.getAttribute("id");
+                tocNav
+                  .querySelectorAll(".toc-link")
+                  .forEach((l) => l.classList.remove("toc-active"));
+                tocNav
+                  .querySelector(`a[href="#${id}"]`)
+                  ?.classList.add("toc-active");
+              }
+            },
+            { rootMargin: "-10% 0% -75% 0%" },
+          );
+          headings.forEach((h) => tocObserver!.observe(h));
+        }
+      }
+    });
+  </script>
+</BaseLayout>

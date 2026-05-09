@@ -1,0 +1,73 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Custom animations — viewmotion docs
+description: Create and register custom animation presets with registerPreset().
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import NavLinks from "../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Custom animations
+
+Built-in presets not enough? Register your own with `registerPreset()`.
+
+## How it works
+
+`registerPreset()` links a preset name to a CSS `@keyframes` rule you define in your
+stylesheet. viewmotion automatically injects the required hide and reveal CSS rules for
+the new preset. This keeps all animation logic in CSS — no JS-driven motion.
+
+## Registering a custom preset
+
+**Step 1** — Define the `@keyframes` in your CSS file:
+
+```css
+@keyframes my-slide-rotate {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+```
+
+**Step 2** — Register the preset **before** calling `initMotion()`:
+
+```js
+import { registerPreset, initMotion } from "viewmotion";
+
+registerPreset("slide-rotate", { keyframes: "my-slide-rotate" });
+
+await initMotion();
+```
+
+## Preset definition
+
+A preset definition object accepts the following property:
+
+| Property    | Type     | Required | Description                                                  |
+| ----------- | -------- | -------- | ------------------------------------------------------------ |
+| `keyframes` | `string` | Yes      | Name of the CSS `@keyframes` rule defined in your stylesheet |
+
+## Using a custom preset
+
+Once registered, use the preset name just like any built-in preset:
+
+```html
+<h1 data-motion='{"preset":"slide-rotate"}'>Custom animation!</h1>
+```
+
+<Callout type="tip">
+  Stick to animating `transform`, `opacity`, and `filter` for best performance.
+  These properties are GPU-composited and won't trigger layout recalculations.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/presets", label: "Presets" }}
+  next={{ href: "/docs/stagger", label: "Stagger" }}
+/>

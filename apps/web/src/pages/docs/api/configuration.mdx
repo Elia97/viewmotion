@@ -1,0 +1,62 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: "Configuration — API reference — viewmotion docs"
+description: Full configuration reference for initMotion() options and global settings.
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Configuration
+
+viewmotion is designed to work with zero configuration, but every behavior can be customized.
+
+## Default configuration
+
+```js
+await initMotion({
+  // IntersectionObserver options
+  threshold: 0.1, // 10% visible
+  rootMargin: "0px", // no margin
+
+  // Smooth scroll
+  smoothScroll: true, // enabled (requires lenis)
+});
+```
+
+## All options
+
+| Option            | Type           | Default | Description                                                                                                               |
+| ----------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `threshold`       | `number`       | `0.1`   | Percentage of the element that must be visible (0–1) before triggering the animation.                                     |
+| `rootMargin`      | `string`       | `"0px"` | Margin around the root in CSS margin syntax. Use to grow or shrink the trigger area.                                      |
+| `defaultDuration` | `number`       | —       | Default animation duration in ms applied to all elements (overridable per-element via `data-motion`).                     |
+| `defaultDelay`    | `number`       | —       | Default animation delay in ms applied to all elements (overridable per-element via `data-motion`).                        |
+| `smoothScroll`    | `boolean`      | `true`  | Enable Lenis smooth scroll. Requires `lenis` as a peer dependency. Falls back to native scroll if Lenis is not installed. |
+| `scroll`          | `LenisOptions` | —       | Lenis configuration object passed directly to the Lenis constructor when `smoothScroll` is enabled.                       |
+
+## Smooth scroll configuration
+
+When `smoothScroll` is enabled, pass a `scroll` object with Lenis options:
+
+```js
+await initMotion({
+  smoothScroll: true,
+  scroll: {
+    lerp: 0.08,
+    wheelMultiplier: 1,
+  },
+});
+```
+
+<Callout type="warning">
+  The `lenis` package must be installed separately as a peer dependency: `npm
+  install lenis`
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/api/register-preset", label: "registerPreset()" }}
+  next={{ href: "/docs/adapters/react", label: "React adapter" }}
+/>

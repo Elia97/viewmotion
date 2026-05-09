@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: React adapter — viewmotion docs
+description: Use viewmotion in React with the useMotion hook from viewmotion-react.
+---
+
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import Callout from "../../../components/mdx/Callout.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# React
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion-react</p>
+
+The React adapter provides a `useMotion` hook that attaches scroll-reveal animations to refs.
+
+## Installation
+
+```bash
+npm install viewmotion-react
+```
+
+## useMotion hook
+
+```tsx
+import { useMotion } from "viewmotion-react";
+
+function Hero() {
+  const ref = useMotion({ preset: "fade-up", delay: 200 });
+  return <h1 ref={ref}>Hello</h1>;
+}
+```
+
+## Hook parameters
+
+| Property   | Type     | Description                 |
+| ---------- | -------- | --------------------------- |
+| `preset`   | `string` | Animation preset name       |
+| `delay`    | `number` | Delay before animation (ms) |
+| `duration` | `number` | Animation duration (ms)     |
+
+## Full example
+
+```tsx
+import { useMotion } from "viewmotion-react";
+
+export default function Features() {
+  const titleRef = useMotion({ preset: "fade-up" });
+  const card1Ref = useMotion({ preset: "fade-up", delay: 100 });
+  const card2Ref = useMotion({ preset: "fade-up", delay: 200 });
+
+  return (
+    <section>
+      <h2 ref={titleRef}>Features</h2>
+      <div ref={card1Ref}>Card 1</div>
+      <div ref={card2Ref}>Card 2</div>
+    </section>
+  );
+}
+```
+
+## Stagger with lists
+
+For staggered lists, compute the delay from the array index:
+
+```tsx
+import { useMotion } from "viewmotion-react";
+
+const items = ["Feature A", "Feature B", "Feature C"];
+
+export default function FeatureList() {
+  return (
+    <ul>
+      {items.map((item, i) => {
+        const ref = useMotion({ preset: "fade-up", delay: i * 80 });
+        return (
+          <li key={item} ref={ref}>
+            {item}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+```
+
+<Callout type="tip">
+  `viewmotion-react` initializes its own observer when the hook mounts. You
+  don't need to call `initMotion()` separately when using the React adapter.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/api/configuration", label: "Configuration" }}
+  next={{ href: "/docs/adapters/vue", label: "Vue adapter" }}
+/>

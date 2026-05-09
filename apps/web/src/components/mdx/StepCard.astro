@@ -1,0 +1,26 @@
+---
+import { motion } from "viewmotion";
+
+/**
+ * Step card with numbered title for Architecture Overview / how-it-works sections.
+ * Usage:
+ *   <StepCard step="1" title="Initialization">content here</StepCard>
+ */
+interface Props {
+  step?: string | number;
+  title: string;
+}
+
+const { step, title } = Astro.props;
+const label = step ? `${step}. ${title}` : title;
+---
+
+<div
+  class="border rounded-xl p-6 mb-4"
+  {...motion({ preset: "fade-up", duration: 500, once: true })}
+>
+  <h3 class="text-base font-semibold text-primary mb-2">{label}</h3>
+  <div class="text-muted-foreground text-sm leading-relaxed">
+    <slot />
+  </div>
+</div>

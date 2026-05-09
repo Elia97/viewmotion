@@ -1,0 +1,7 @@
+---
+import { motion } from "viewmotion";
+---
+
+<blockquote {...motion({ preset: "fade-up", once: true })} {...Astro.props}>
+  <slot />
+</blockquote>

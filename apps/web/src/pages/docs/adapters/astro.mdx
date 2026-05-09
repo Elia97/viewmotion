@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Astro adapter — viewmotion docs
+description: Use viewmotion in Astro with the motion() and stagger() spread helpers.
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# Astro
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion (core)</p>
+
+Astro is a first-class citizen for viewmotion. The core package ships `motion()` and
+`stagger()` helpers that return attribute spreads — perfect for Astro's template syntax.
+
+## Installation
+
+```bash
+npm install viewmotion
+```
+
+## Initialization
+
+Call `initMotion()` once in your layout. With Astro's `ClientRouter` (ViewTransitions),
+use the `astro:page-load` event so animations re-trigger on every navigation:
+
+```html
+<script>
+  import { initMotion } from "viewmotion";
+
+  document.addEventListener("astro:page-load", async () => {
+    await initMotion();
+  });
+</script>
+```
+
+## motion() helper
+
+Use the spread syntax to add animation attributes to any element:
+
+```astro
+---
+import { motion } from "viewmotion";
+---
+
+<h1 {...motion("fade-up")}>Hello</h1>
+
+<!-- With options -->
+<div {...motion("slide-left", { delay: 200 })}>Content</div>
+```
+
+## stagger() helper
+
+Apply `stagger()` to a container — each direct child with `data-motion` receives an
+automatic incremental delay based on `step`:
+
+```astro
+---
+import { motion, stagger } from "viewmotion";
+const features = ["Fast", "Lightweight", "Accessible"];
+---
+
+<div {...stagger({ step: 80 })}>
+  {features.map((f) => (
+    <div {...motion({ preset: "fade-up" })}>{f}</div>
+  ))}
+</div>
+```
+
+<Callout type="tip">
+  `stagger()` spreads a `data-stagger` attribute on the container. When
+  `initMotion()` runs, it reads `step` and sets each child's delay to `index ×
+  step` ms.
+</Callout>
+
+## Full page example
+
+```astro
+---
+import { motion, stagger } from "viewmotion";
+import Layout from "../layouts/Layout.astro";
+
+const cards = ["Card 1", "Card 2", "Card 3"];
+---
+
+<Layout title="Home">
+  <section>
+    <h1 {...motion("fade-up")}>Welcome</h1>
+    <p {...motion("fade-up", { delay: 100 })}>
+      A minimal reveal animation library.
+    </p>
+
+    <div {...stagger({ step: 80 })}>
+      {cards.map((c) => (
+        <div {...motion({ preset: "fade-up" })}>{c}</div>
+      ))}
+    </div>
+  </section>
+</Layout>
+```
+
+## ViewTransitions support
+
+When using Astro's `ClientRouter`, animations re-trigger correctly on each navigation
+because `initMotion()` listens to `astro:page-load`. The observer is re-created on each
+page load, so new elements are picked up automatically.
+
+<NavLinks
+  prev={{ href: "/docs/adapters/svelte", label: "Svelte adapter" }}
+  next={{ href: "/docs/advanced/smooth-scroll", label: "Smooth scroll" }}
+/>

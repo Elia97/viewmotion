@@ -1,0 +1,238 @@
+---
+interface Props {
+  pkg: string;
+  class?: string;
+}
+
+const { pkg, class: className = "" } = Astro.props;
+
+const managers = [
+  { id: "npm", cmd: `npm install ${pkg}` },
+  { id: "pnpm", cmd: `pnpm add ${pkg}` },
+  { id: "yarn", cmd: `yarn add ${pkg}` },
+  { id: "bun", cmd: `bun add ${pkg}` },
+];
+---
+
+<div
+  class:list={[
+    "install-snippet border rounded-lg font-mono text-sm",
+    className,
+  ]}
+  data-commands={JSON.stringify(managers)}
+>
+  <!-- Mobile: manager selector on its own row -->
+  <div class="sm:hidden flex items-center border-b px-4 py-2">
+    <div class="pkg-dropdown relative w-full">
+      <button
+        type="button"
+        class="pkg-trigger flex items-center justify-between w-full text-xs text-muted-foreground cursor-pointer focus:outline-none"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+      >
+        <span class="pkg-label">{managers[0].id}</span>
+        <svg
+          class="w-3 h-3 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <ul
+        role="listbox"
+        class="pkg-list hidden absolute left-0 top-full mt-1 z-50 min-w-full bg-card border rounded-lg shadow-lg overflow-hidden py-1"
+      >
+        {
+          managers.map(({ id }, i) => (
+            <li
+              role="option"
+              aria-selected={i === 0}
+              data-value={id}
+              class:list={[
+                "px-3 py-1.5 text-xs cursor-pointer transition-colors",
+                i === 0
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+              ]}
+            >
+              {id}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!-- Command row (always visible) -->
+  <div class="flex items-center gap-2 px-6 sm:h-12 py-3 sm:py-0 min-w-0">
+    <!-- Desktop: inline manager selector -->
+    <div
+      class="pkg-dropdown hidden sm:block relative border-r pr-3 mr-2 shrink-0"
+    >
+      <button
+        type="button"
+        class="pkg-trigger flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer focus:outline-none"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+      >
+        <span class="pkg-label">{managers[0].id}</span>
+        <svg
+          class="w-2.5 h-2.5 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <ul
+        role="listbox"
+        class="pkg-list hidden absolute -left-8 bottom-full mb-4 z-9999 min-w-24 bg-card border rounded-lg shadow-lg overflow-hidden py-1"
+      >
+        {
+          managers.map(({ id }, i) => (
+            <li
+              role="option"
+              aria-selected={i === 0}
+              data-value={id}
+              class:list={[
+                "px-3 py-1.5 text-xs cursor-pointer transition-colors",
+                i === 0
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+              ]}
+            >
+              {id}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <span class="install-cmd text-foreground truncate flex-1 min-w-0 text-xs">
+      <span class="text-muted-foreground">$</span>
+      {" "}{managers[0].cmd}
+    </span>
+
+    <button
+      class="install-copy shrink-0 flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-accent"
+      data-copy={managers[0].cmd}
+      aria-label="Copy install command"
+      title="Copy"
+    >
+      <svg
+        data-copy-icon
+        class="w-3.5 h-3.5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+        ></path>
+      </svg>
+      <span data-copy-label class="text-xs">Copy</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  function initInstallSnippets() {
+    // ── Custom dropdown logic ──────────────────────────────────────
+    document
+      .querySelectorAll<HTMLElement>(".install-snippet")
+      .forEach((snippet) => {
+        const commands: { id: string; cmd: string }[] = JSON.parse(
+          snippet.dataset.commands ?? "[]",
+        );
+        const cmdEl = snippet.querySelector<HTMLElement>(".install-cmd");
+        const copyBtn =
+          snippet.querySelector<HTMLButtonElement>(".install-copy");
+        const dropdowns =
+          snippet.querySelectorAll<HTMLElement>(".pkg-dropdown");
+
+        function selectManager(id: string) {
+          const entry = commands.find((c) => c.id === id);
+          if (!entry || !cmdEl || !copyBtn) return;
+
+          // Update command + copy target
+          cmdEl.innerHTML = `<span class="text-muted-foreground">$</span> ${entry.cmd}`;
+          copyBtn.setAttribute("data-copy", entry.cmd);
+
+          // Sync all dropdowns (mobile + desktop)
+          dropdowns.forEach((dd) => {
+            const label = dd.querySelector<HTMLElement>(".pkg-label");
+            if (label) label.textContent = id;
+
+            dd.querySelectorAll<HTMLElement>("[role='option']").forEach(
+              (opt) => {
+                const active = opt.dataset.value === id;
+                opt.setAttribute("aria-selected", String(active));
+                opt.classList.toggle("text-foreground", active);
+                opt.classList.toggle("bg-accent", active);
+                opt.classList.toggle("text-muted-foreground", !active);
+              },
+            );
+          });
+        }
+
+        function closeAll() {
+          dropdowns.forEach((dd) => {
+            dd.querySelector(".pkg-list")?.classList.add("hidden");
+            dd.querySelector(".pkg-trigger")?.setAttribute(
+              "aria-expanded",
+              "false",
+            );
+          });
+        }
+
+        dropdowns.forEach((dd) => {
+          const trigger = dd.querySelector<HTMLButtonElement>(".pkg-trigger");
+          const list = dd.querySelector<HTMLElement>(".pkg-list");
+
+          trigger?.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isOpen = !list?.classList.contains("hidden");
+            // Close all first
+            closeAll();
+            if (!isOpen) {
+              list?.classList.remove("hidden");
+              trigger.setAttribute("aria-expanded", "true");
+            }
+          });
+
+          list
+            ?.querySelectorAll<HTMLElement>("[role='option']")
+            .forEach((opt) => {
+              opt.addEventListener("click", () => {
+                selectManager(opt.dataset.value ?? "");
+                closeAll();
+              });
+            });
+        });
+      });
+
+    // Close dropdowns on outside click
+    document.addEventListener("click", () => {
+      document
+        .querySelectorAll<HTMLElement>(".pkg-list")
+        .forEach((l) => l.classList.add("hidden"));
+      document
+        .querySelectorAll<HTMLElement>(".pkg-trigger")
+        .forEach((t) => t.setAttribute("aria-expanded", "false"));
+    });
+  }
+
+  document.addEventListener("astro:page-load", initInstallSnippets);
+</script>

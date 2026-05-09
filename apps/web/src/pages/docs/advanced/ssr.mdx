@@ -1,0 +1,100 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: SSR & Hydration — viewmotion docs
+description: How viewmotion handles server-side rendering and client hydration.
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# SSR & Hydration
+
+viewmotion is designed to work seamlessly in both static and server-rendered environments.
+
+## How it works
+
+viewmotion's animation logic runs entirely on the client. Server-rendered HTML only
+contains the `data-motion` attributes — no JavaScript is executed server-side.
+
+When the page loads in the browser, `initMotion()` creates an IntersectionObserver that
+watches all elements with `data-motion` attributes. Animations trigger as elements
+enter the viewport.
+
+## Preventing flash of unstyled content (FOUC)
+
+viewmotion's CSS hides elements with `data-motion` until they're animated in. This means
+there's no visible "flash" — elements stay hidden until the observer fires.
+
+```css
+/* viewmotion's internal CSS — you don't need to add this */
+[data-motion] {
+  opacity: 0;
+}
+```
+
+## Static site generators
+
+With Astro (static mode), Gatsby, or any SSG, the `motion()` helper generates
+`data-motion` attributes at build time. The HTML ships with the correct attributes,
+and `initMotion()` hooks them up in the browser. No special configuration is needed
+— it just works.
+
+## SSR frameworks
+
+For frameworks with server rendering, make sure to call `initMotion()` only on the client:
+
+### Next.js (App Router)
+
+```jsx
+"use client";
+import { useEffect } from "react";
+import { initMotion } from "viewmotion";
+
+export default function MotionProvider({ children }) {
+  useEffect(() => {
+    initMotion();
+  }, []);
+  return <>{children}</>;
+}
+```
+
+### Nuxt
+
+```ts
+// plugins/viewmotion.client.ts
+import { initMotion } from "viewmotion";
+
+export default defineNuxtPlugin(() => {
+  initMotion();
+});
+```
+
+### SvelteKit
+
+```svelte
+<!-- +layout.svelte -->
+<script>
+  import { onMount } from "svelte";
+  import { initMotion } from "viewmotion";
+
+  onMount(() => {
+    initMotion();
+  });
+</script>
+
+<slot />
+```
+
+## Key points
+
+- `motion()` and `stagger()` are safe to run on the server — they only return data attributes
+- `initMotion()` must run on the client (it uses `IntersectionObserver`)
+- No FOUC — elements are hidden via CSS until animated
+- Framework adapter packages handle SSR automatically
+
+<NavLinks
+  prev={{ href: "/docs/advanced/smooth-scroll", label: "Smooth scroll" }}
+  next={{ href: "/docs/advanced/performance", label: "Performance" }}
+/>

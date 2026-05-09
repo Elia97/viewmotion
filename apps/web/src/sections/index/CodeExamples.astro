@@ -1,0 +1,31 @@
+---
+import { motion } from "viewmotion";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { snippets } from "../../utils/snippets";
+import SectionHeader from "../../components/SectionHeader.astro";
+
+const cards = [
+  { title: "Vanilla HTML", ...snippets.vanilla },
+  { title: "React", ...snippets.react },
+  { title: "Vue", ...snippets.vue },
+  { title: "Svelte", ...snippets.svelte },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="container mx-auto">
+    <SectionHeader
+      label="Code examples"
+      heading="Idiomatic in every framework"
+      subtext="Each adapter exposes the API pattern native to its framework. Same animations, zero learning curve."
+    />
+
+    <div class="grid md:grid-cols-2 gap-6">
+      {
+        cards.map(({ title, code, lang }) => (
+          <CodeBlock title={title} code={code} lang={lang} />
+        ))
+      }
+    </div>
+  </div>
+</section>

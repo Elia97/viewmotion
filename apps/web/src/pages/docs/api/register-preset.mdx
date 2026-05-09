@@ -1,0 +1,80 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: "registerPreset() — API reference — viewmotion docs"
+description: "API reference for registerPreset(): add custom animation presets to viewmotion."
+---
+
+import Callout from "../../../components/mdx/Callout.astro";
+import NavLinks from "../../../components/mdx/NavLinks.astro";
+import { components } from "@/components/docs/index.ts";
+export { components };
+
+# registerPreset()
+
+<p class="text-neutral-500 text-sm font-mono mb-2">viewmotion</p>
+
+Register a custom animation preset. Must be called **before** `initMotion()`.
+
+## Signature
+
+```ts
+function registerPreset(name: string, definition: PresetDefinition): void;
+```
+
+## Parameters
+
+| Parameter    | Type               | Description                                            |
+| ------------ | ------------------ | ------------------------------------------------------ |
+| `name`       | `string`           | Unique name for the preset                             |
+| `definition` | `PresetDefinition` | Object describing the animation keyframes and settings |
+
+## PresetDefinition
+
+| Property    | Type     | Required | Description                                                     |
+| ----------- | -------- | -------- | --------------------------------------------------------------- |
+| `keyframes` | `string` | Yes      | Name of the CSS `@keyframes` rule you define in your stylesheet |
+
+## Example
+
+1. Define the `@keyframes` in your CSS:
+
+```css
+@keyframes my-flip {
+  from {
+    opacity: 0;
+    transform: perspective(600px) rotateX(90deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(600px) rotateX(0);
+  }
+}
+```
+
+2. Register the preset before calling `initMotion()`:
+
+```js
+import { registerPreset, initMotion } from "viewmotion";
+
+// Register before init
+registerPreset("flip-in", { keyframes: "my-flip" });
+
+await initMotion();
+```
+
+viewmotion automatically injects the hide and reveal CSS rules for the new preset. Use it exactly like any built-in preset:
+
+```html
+<div data-motion='{"preset":"flip-in"}'>Custom animation!</div>
+```
+
+<Callout type="danger" title="Order matters">
+  `registerPreset()` must be called **before** `initMotion()`. Presets
+  registered after initialization have no effect on elements already being
+  observed.
+</Callout>
+
+<NavLinks
+  prev={{ href: "/docs/api/stagger", label: "stagger()" }}
+  next={{ href: "/docs/api/configuration", label: "Configuration" }}
+/>
